@@ -3,6 +3,7 @@ const http=require('http');
 const fs=require('fs');
 const path=require('path');
 const original=http.createServer;
+const FRONTEND_ORIGIN='https://tanvolam.onrender.com';
 const dataFile=path.join(process.env.DATA_DIR||path.join(__dirname,'data'),'database.json');
 const admins=new Set(String(process.env.ADMIN_USERNAMES||'admin1234').split(',').map(x=>x.trim().toLowerCase()).filter(Boolean));
 function load(){try{return JSON.parse(fs.readFileSync(dataFile,'utf8'))}catch(_){return{users:[],sessions:[]}}}
@@ -10,10 +11,13 @@ function save(d){fs.mkdirSync(path.dirname(dataFile),{recursive:true});fs.writeF
 function cookie(req,n){const x=String(req.headers.cookie||'').split(';').map(v=>v.trim()).find(v=>v.startsWith(n+'='));return x?decodeURIComponent(x.slice(n.length+1)):''}
 function user(req,d){const s=(d.sessions||[]).find(x=>x.id===cookie(req,'jx_session')&&Number(x.expiresAt)>Date.now());return s?(d.users||[]).find(x=>x.id===s.userId)||null:null}
 function admin(u){return !!u&&admins.has(String(u.username||'').toLowerCase())}
+function cors(req,res){const origin=req.headers.origin;if(origin===FRONTEND_ORIGIN){res.setHeader('Access-Control-Allow-Origin',FRONTEND_ORIGIN);res.setHeader('Access-Control-Allow-Credentials','true');res.setHeader('Access-Control-Allow-Headers','Content-Type, Authorization, X-Requested-With');res.setHeader('Access-Control-Allow-Methods','GET,HEAD,POST,PUT,PATCH,DELETE,OPTIONS');res.setHeader('Vary','Origin')}}
 function json(res,status,data){const b=JSON.stringify(data);res.statusCode=status;res.setHeader('content-type','application/json; charset=utf-8');res.end(b)}
 function body(req,cb){const a=[];req.on('data',x=>a.push(x));req.on('end',()=>{try{cb(JSON.parse(Buffer.concat(a).toString()||'{}'))}catch(_){cb({})}})}
 function game(u){const g=u&&u.game&&typeof u.game==='object'?u.game:{};const slots=Array.isArray(g.slots)?g.slots.slice(0,3):[];while(slots.length<3)slots.push(null);return{...g,slots}}
 http.createServer=function(listener,...args){return original.call(http,(req,res)=>{
+ cors(req,res);
+ if(req.method==='OPTIONS'&&req.headers.origin===FRONTEND_ORIGIN){res.statusCode=204;return res.end()}
  const url=new URL(req.url||'/','http://local');
  if(url.pathname==='/api/auth/me'&&req.method==='GET'){
   const d=load(),u=user(req,d);if(!u)return json(res,401,{error:'Chưa đăng nhập'});return json(res,200,{user:{id:u.id,username:u.username,createdAt:u.createdAt,role:admin(u)?'admin':'player',locked:!!u.locked}})
