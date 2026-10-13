@@ -19,7 +19,7 @@ function cfg(){try{return {...DEFAULT,...JSON.parse(fs.readFileSync(CFG,'utf8'))
 function saveCfg(v){fs.mkdirSync(path.dirname(CFG),{recursive:true});fs.writeFileSync(CFG,JSON.stringify(v,null,2))}
 function cookie(req){const x=String(req.headers.cookie||'').split(';').map(v=>v.trim()).find(v=>v.startsWith('jx_session='));return x?decodeURIComponent(x.slice(11)):''}
 function current(req,d){const sid=cookie(req),s=(d.sessions||[]).find(x=>x.id===sid&&Number(x.expiresAt)>Date.now());return s?(d.users||[]).find(x=>x.id===s.userId)||null:null}
-function admin(u){return !!u&&ADM.has(String(u.username||'').toLowerCase())}
+function admin(u){return !!u&&(u.role==='admin'||ADM.has(String(u.username||'').toLowerCase()))}
 function cors(req,res){const origin=req&&req.headers?req.headers.origin:'';if(origin===ORIGIN){res.setHeader('Access-Control-Allow-Origin',ORIGIN);res.setHeader('Access-Control-Allow-Credentials','true');res.setHeader('Access-Control-Allow-Headers','Content-Type, Authorization, X-Requested-With');res.setHeader('Access-Control-Allow-Methods','GET,HEAD,POST,PUT,PATCH,DELETE,OPTIONS');res.setHeader('Vary','Origin')}}
 function json(req,res,status,data){cors(req,res);res.statusCode=status;res.setHeader('content-type','application/json; charset=utf-8');res.end(JSON.stringify(data))}
 function body(req,cb){const chunks=[];req.on('data',x=>chunks.push(x));req.on('end',()=>{try{cb(JSON.parse(Buffer.concat(chunks).toString()||'{}'))}catch(_){cb({})}})}
