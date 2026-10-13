@@ -19,9 +19,7 @@
         return API_ORIGIN + url.pathname + url.search + url.hash;
       }
       return raw;
-    } catch (_) {
-      return raw;
-    }
+    } catch (_) { return raw; }
   }
 
   window.fetch = function (input, init) {
@@ -29,26 +27,14 @@
     const isRequestObject = typeof input !== 'string' && input instanceof Request;
     let nextInput = input;
     let nextInit = init ? { ...init } : {};
-
     if (apiUrl && apiUrl !== (typeof input === 'string' ? input : input?.url)) {
-      if (isRequestObject) {
-        nextInput = new Request(apiUrl, input);
-      } else {
-        nextInput = apiUrl;
-      }
+      if (isRequestObject) nextInput = new Request(apiUrl, input);
+      else nextInput = apiUrl;
     }
-
-    // Authentication uses the jx_session cookie. Cross-origin fetches need
-    // explicit credentials, while same-origin asset requests remain valid.
-    if (!Object.prototype.hasOwnProperty.call(nextInit, 'credentials')) {
-      nextInit.credentials = 'include';
-    }
-
+    if (!Object.prototype.hasOwnProperty.call(nextInit, 'credentials')) nextInit.credentials = 'include';
     return nativeFetch(nextInput, nextInit);
   };
 
-  // The chat stream may use EventSource rather than fetch(). Rewrite its
-  // relative /api/* URL and keep the login cookie on the cross-origin stream.
   if (typeof window.EventSource === 'function') {
     const NativeEventSource = window.EventSource;
     const PatchedEventSource = function (url, config) {
@@ -62,4 +48,11 @@
     PatchedEventSource.CLOSED = NativeEventSource.CLOSED;
     window.EventSource = PatchedEventSource;
   }
+
+  // VLTKIDLE2-style ADMV runtime: the admin only queues commands;
+  // the game client consumes and applies them while the character is open.
+  const tag=document.createElement('script');
+  tag.src='/js/admv-runtime.js?v=20261013-queue1';
+  tag.async=false;
+  (document.head||document.documentElement).appendChild(tag);
 })();
