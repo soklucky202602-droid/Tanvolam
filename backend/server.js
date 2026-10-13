@@ -15,6 +15,30 @@ const SESSION_TTL_MS = 30 * 24 * 60 * 60 * 1000;
 const PRESENCE_TTL_MS = 3500;
 
 app.set('trust proxy', 1);
+
+// The frontend is a Render Static Site and the API is a separate Render
+// Web Service. Authentication uses an httpOnly cookie, so credentialed
+// cross-origin requests must explicitly allow the frontend origin.
+const allowedOrigins = new Set([
+  'https://tanvolam.onrender.com',
+  'http://localhost:3000',
+  'http://localhost:5173',
+  'http://127.0.0.1:3000',
+  'http://127.0.0.1:5173'
+]);
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (origin && allowedOrigins.has(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Vary', 'Origin');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+  }
+  if (req.method === 'OPTIONS') return res.sendStatus(204);
+  next();
+});
+
 app.use(express.json({ limit: '4mb' }));
 app.use(cookieParser());
 
@@ -258,66 +282,32 @@ app.post('/api/world/presence', requireUser, (req, res) => {
   const peers = [];
   for (const value of presence.values()) {
     if (value.userId === req.user.id && value.clientId === clientId) continue;
-    if (now - value.seenAt > PRESENCE_TTL_MS) continue;
-    if (String(value.zoneId) !== String(p.zoneId)) continue;
-    if (!!value.isTown !== !!p.isTown) continue;
-    peers.push({ ...value });
+    peers.push(value);
   }
-  res.json({ peers, simbotEnabled: process.env.SIMBOT_ENABLED !== 'false' });
+  res.json({ ok: true, peers });
 });
 
 app.post('/api/gift-codes/redeem', requireUser, (req, res) => {
   const code = String(req.body?.code || '').trim().toUpperCase();
-  const codes = parseGiftCodes();
-  const item = codes[code];
-  if (!item) return res.status(404).json({ error: 'Mã quà tặng không hợp lệ.' });
-  if (db.giftClaims.some(c => c.key === claimKey(req.user.id, code))) return res.status(409).json({ error: 'Bạn đã sử dụng mã này.' });
-  const choices = Array.isArray(item.choices) ? item.choices : [{ value: item.kind || 'ttl_knb', label: 'Phần thưởng' }];
-  res.json({ ok: true, choices });
+  const all = parseGiftCodes();
+  if (!code || !all[code]) return res.status(404).json({ error: 'Mã quà không hợp lệ.' });
+  if (db.giftClaims.some(x => x === claimKey(req.user.id, code))) return res.status(409).json({ error: 'Mã này đã được nhận.' });
+  res.json({ ok: true, choices: Array.isArray(all[code].choices) ? all[code].choices : [] });
 });
 
 app.post('/api/gift-codes/choose', requireUser, (req, res) => {
   const code = String(req.body?.code || '').trim().toUpperCase();
-  const choice = String(req.body?.choice ?? '0');
-  const codes = parseGiftCodes();
-  const item = codes[code];
-  if (!item) return res.status(404).json({ error: 'Mã quà tặng không hợp lệ.' });
-  if (db.giftClaims.some(c => c.key === claimKey(req.user.id, code))) return res.status(409).json({ error: 'Bạn đã sử dụng mã này.' });
-  const choices = Array.isArray(item.choices) ? item.choices : [{ value: item.kind || 'ttl_knb', label: 'Phần thưởng' }];
-  if (!choices.some(c => String(c.value) === choice)) return res.status(400).json({ error: 'Phần thưởng không hợp lệ.' });
-
-  const slotIndex = Math.max(0, Math.min(2, Number(req.body?.slot || 0)));
-  const game = normalizeGame(req.user.game);
-  const player = game.slots[slotIndex];
-  if (!player || typeof player !== 'object') return res.status(400).json({ error: 'Chưa có nhân vật để nhận quà.' });
-
-  player.stackItems = player.stackItems || {};
-  player.mats = player.mats || {};
-  player.mats.misc = player.mats.misc || {};
-  const add = (key, qty) => {
-    player.stackItems[key] = (Number(player.stackItems[key]) || 0) + qty;
-    player.mats.misc[key] = (Number(player.mats.misc[key]) || 0) + qty;
-  };
-  const kind = choice;
-  if (kind === 'ttl_knb' || kind === 'tienthaolo' || kind === 'kimphong') {
-    player.knb = Number(player.knb || 0) + 5;
-    add('tt', 5);
-  }
-  if (kind === 'kimphong') {
-    player.giftSets = player.giftSets || {};
-    player.giftSets.kimphong = Number(player.giftSets.kimphong || 0) + 1;
-  }
-
-  req.user.game = game;
-  req.user.revision = Number(req.user.revision || 0) + 1;
-  db.giftClaims.push({ key: claimKey(req.user.id, code), userId: req.user.id, code, choice: kind, at: new Date().toISOString() });
+  const choice = String(req.body?.choice || '').trim();
+  const all = parseGiftCodes();
+  if (!code || !all[code]) return res.status(404).json({ error: 'Mã quà không hợp lệ.' });
+  if (!choice) return res.status(400).json({ error: 'Thiếu lựa chọn.' });
+  if (db.giftClaims.some(x => x === claimKey(req.user.id, code))) return res.status(409).json({ error: 'Mã này đã được nhận.' });
+  const valid = (all[code].choices || []).some(x => String(x.value) === choice);
+  if (!valid) return res.status(400).json({ error: 'Lựa chọn không hợp lệ.' });
+  db.giftClaims.push(claimKey(req.user.id, code));
   saveDbSoon();
-  res.json({ ok: true, kind, count: kind === 'kimphong' ? 9 : 5, revision: req.user.revision });
+  res.json({ ok: true, code, choice });
 });
 
-app.use((req, res) => res.status(404).json({ error: 'API không tồn tại', path: req.path }));
-
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Tanvolam API listening on :${PORT}`);
-  console.log(`Data file: ${DATA_FILE}`);
-});
+const PORT_HOST = process.env.HOST || '0.0.0.0';
+app.listen(PORT, PORT_HOST, () => console.log(`Tanvolam API listening on ${PORT_HOST}:${PORT}`));
