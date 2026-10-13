@@ -6,6 +6,23 @@
 <title>ADMV · Võ Lâm H5</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#09070d;color:#eee7ff;font:14px system-ui,-apple-system,Segoe UI,sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}.wrap{max-width:1280px;margin:auto;padding:18px}.top{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:14px}.title{font-size:25px;font-weight:900;color:#d8b4fe}.sub{color:#9f91b7;font-size:12px}.card{background:#120d1b;border:1px solid #3a2855;border-radius:12px;padding:15px;margin-bottom:14px;box-shadow:0 8px 28px #0007}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}.tabs button{background:#1b1430;border:1px solid #4c3a78;color:#ddd6fe;border-radius:7px;padding:9px 13px;font-weight:800}.tabs button.on{background:#6d28d9;border-color:#a78bfa;color:#fff}.pane{display:none}.pane.on{display:block}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row>*{flex:1}.input,input,select,textarea{width:100%;background:#08060c;border:1px solid #4c3a78;color:#fff;border-radius:7px;padding:9px}.btn{background:#6d28d9;border:1px solid #a78bfa;color:#fff;border-radius:7px;padding:9px 13px;font-weight:800}.btn2{background:#211936;border:1px solid #4c3a78;color:#ddd6fe;border-radius:7px;padding:9px 13px;font-weight:700}.danger{color:#fca5a5}.ok{color:#86efac}.target{background:#25153d;border:1px solid #7c3aed;padding:10px;border-radius:8px;margin:10px 0;color:#ddd6fe}.list{max-height:300px;overflow:auto;border:1px solid #302344;border-radius:8px}.item{padding:10px;border-bottom:1px solid #211932;cursor:pointer}.item:hover,.item.sel{background:#25153d}.action{display:grid;grid-template-columns:1.7fr 1fr auto;gap:8px;align-items:center;background:#0d0913;border:1px solid #2f2448;border-radius:8px;padding:10px;margin:7px 0}.action b{color:#eadcff}.setting{background:#0d0913;border:1px solid #2f2448;border-radius:8px;padding:10px}.setting label{display:block;color:#c4b5fd;font-size:12px;margin-bottom:6px}.checks{display:flex;gap:18px;flex-wrap:wrap;margin:12px 0}.login{max-width:430px;margin:12vh auto}.login h1{text-align:center}.hide{display:none!important}.msg{min-height:22px;margin-top:8px}.log{max-height:320px;overflow:auto;font-size:12px}.log div{padding:8px;border-bottom:1px solid #211932}@media(max-width:800px){.grid,.action{grid-template-columns:1fr}.top{align-items:flex-start;flex-direction:column}}
+
+/* ADMV layout repair: prevent settings cards from forcing the page wider than the viewport. */
+html,body{width:100%;max-width:100%;min-width:0;overflow-x:hidden}
+.wrap{width:100%;max-width:1120px;min-width:0;margin-inline:auto;padding:clamp(10px,2.2vw,22px)}
+#app,.card,.pane,#settings{width:100%;max-width:100%;min-width:0}
+.grid{width:100%;max-width:100%;min-width:0;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));gap:12px}
+.setting{min-width:0;width:100%;display:flex;flex-direction:column;justify-content:space-between;gap:10px;padding:13px}
+.setting label{min-width:0;min-height:2.4em;line-height:1.35;font-size:13px;overflow-wrap:anywhere}
+.setting select{display:block;width:100%;max-width:100%;min-width:0;height:42px;padding:8px 10px}
+.checks{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:10px;margin:14px 0}
+.checks label{display:flex;align-items:center;gap:9px;min-width:0;margin:0;padding:10px 12px;background:#0d0913;border:1px solid #302344;border-radius:8px;line-height:1.4}
+.checks input[type="checkbox"]{appearance:auto;width:17px!important;height:17px;min-width:17px;flex:0 0 17px;margin:0;accent-color:#7c3aed}
+#settings .btn,#settings .btn2{min-height:40px;white-space:normal;margin:3px 6px 3px 0}
+#settings .msg{min-height:0;line-height:1.5;overflow-wrap:anywhere}
+#settings .msg:not(:empty){margin-top:10px;padding:10px 12px;border:1px solid #3a2855;border-radius:8px;background:#0d0913}
+@media(max-width:620px){.wrap{padding:10px}.card{padding:12px}.grid{grid-template-columns:minmax(0,1fr)}.checks{grid-template-columns:minmax(0,1fr)}.tabs{gap:6px}.tabs button{padding:8px 10px}.top{align-items:flex-start;flex-direction:column}}
+
 </style>
 <script src="/js/api-config.js?v=20261013-admvpage"></script>
 </head>
