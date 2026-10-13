@@ -6,7 +6,7 @@ const original=http.createServer;
 const FRONTEND_ORIGIN='https://tanvolam.onrender.com';
 const dataFile=path.join(process.env.DATA_DIR||path.join(__dirname,'data'),'database.json');
 const admins=new Set(String(process.env.ADMIN_USERNAMES||'admin1234').split(',').map(x=>x.trim().toLowerCase()).filter(Boolean));
-function load(){try{return JSON.parse(fs.readFileSync(dataFile,'utf8'))}catch(_){return{users:[],sessions:[]}}}
+function load(){try{return JSON.parse(fs.readFileSync(dataFile,'utf8'))}catch(_){return{users:[],sessions:[],giftClaims:[]}}}
 function save(d){fs.mkdirSync(path.dirname(dataFile),{recursive:true});fs.writeFileSync(dataFile,JSON.stringify(d,null,2))}
 function cookie(req,n){const x=String(req.headers.cookie||'').split(';').map(v=>v.trim()).find(v=>v.startsWith(n+'='));return x?decodeURIComponent(x.slice(n.length+1)):''}
 function user(req,d){const s=(d.sessions||[]).find(x=>x.id===cookie(req,'jx_session')&&Number(x.expiresAt)>Date.now());return s?(d.users||[]).find(x=>x.id===s.userId)||null:null}
@@ -15,15 +15,33 @@ function cors(req,res){const origin=req.headers.origin;if(origin===FRONTEND_ORIG
 function json(res,status,data){const b=JSON.stringify(data);res.statusCode=status;res.setHeader('content-type','application/json; charset=utf-8');res.end(b)}
 function body(req,cb){const a=[];req.on('data',x=>a.push(x));req.on('end',()=>{try{cb(JSON.parse(Buffer.concat(a).toString()||'{}'))}catch(_){cb({})}})}
 function game(u){const g=u&&u.game&&typeof u.game==='object'?u.game:{};const slots=Array.isArray(g.slots)?g.slots.slice(0,3):[];while(slots.length<3)slots.push(null);return{...g,slots}}
+function normalize(g){const s=g&&typeof g==='object'?g:{};const slots=Array.isArray(s.slots)?s.slots.slice(0,3):[];while(slots.length<3)slots.push(null);return{...s,slots,activeSlot:String(s.activeSlot??'0')}}
 http.createServer=function(listener,...args){return original.call(http,(req,res)=>{
  cors(req,res);
  if(req.method==='OPTIONS'&&req.headers.origin===FRONTEND_ORIGIN){res.statusCode=204;return res.end()}
  const url=new URL(req.url||'/','http://local');
+ const d=load();
+ const u=user(req,d);
+ 
+ // Keep the live game API on the same file used by the admin panel.
+ // This prevents admin grants from being overwritten by server.js's in-memory DB.
+ if((url.pathname==='/api/game/state')&&(req.method==='GET'||req.method==='PUT')){
+  if(!u)return json(res,401,{error:'Chưa đăng nhập'});
+  const x=d.users.find(v=>v.id===u.id);if(!x)return json(res,401,{error:'Chưa đăng nhập'});
+  if(req.method==='GET')return json(res,200,{game:normalize(x.game),revision:Number(x.revision||0)});
+  return body(req,b=>{
+   const rev=Number(b.revision),cur=Number(x.revision||0);
+   if(!Number.isInteger(rev)||rev!==cur)return json(res,409,{error:'Dữ liệu đã thay đổi ở nơi khác.',revision:cur});
+   const g=normalize(b.game);
+   if(JSON.stringify(g).length>3500000)return json(res,413,{error:'Dữ liệu nhân vật quá lớn.'});
+   x.game=g;x.revision=cur+1;save(d);return json(res,200,{ok:true,revision:x.revision});
+  });
+ }
  if(url.pathname==='/api/auth/me'&&req.method==='GET'){
-  const d=load(),u=user(req,d);if(!u)return json(res,401,{error:'Chưa đăng nhập'});return json(res,200,{user:{id:u.id,username:u.username,createdAt:u.createdAt,role:admin(u)?'admin':'player',locked:!!u.locked}})
+  if(!u)return json(res,401,{error:'Chưa đăng nhập'});return json(res,200,{user:{id:u.id,username:u.username,createdAt:u.createdAt,role:admin(u)?'admin':'player',locked:!!u.locked}})
  }
  if(!url.pathname.startsWith('/api/admin/'))return listener(req,res);
- const d=load(),u=user(req,d);if(!u)return json(res,401,{error:'Chưa đăng nhập'});if(!admin(u))return json(res,403,{error:'Không có quyền quản trị.'});
+ if(!u)return json(res,401,{error:'Chưa đăng nhập'});if(!admin(u))return json(res,403,{error:'Không có quyền quản trị.'});
  if(req.method==='GET'&&url.pathname==='/api/admin/users'){
   const users=(d.users||[]).map(x=>{const s=game(x).slots;return{id:x.id,username:x.username,createdAt:x.createdAt,role:admin(x)?'admin':'player',locked:!!x.locked,isOnline:false,lastSeen:null,activeSlot:Number(game(x).activeSlot||0),slots:s,levels:s.map(v=>v&&v.lvl!=null?Number(v.lvl):null),charName:(s.find(v=>v&&v.name)||{}).name||''}});return json(res,200,{users,total:users.length,onlineCount:0})
  }
