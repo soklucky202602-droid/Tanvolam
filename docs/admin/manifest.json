@@ -1,0 +1,98 @@
+{
+  "source": "https://www.volamh5.top/admin.html",
+  "download_date": "2026-10-11",
+  "files": [
+    {
+      "path": "site/account-box.css",
+      "bytes": 1102,
+      "sha256": "283970c3ec68be6054d6eaa628d123ab55286b589cfbc93004d79c94b969e99f"
+    },
+    {
+      "path": "site/account-box.js",
+      "bytes": 4892,
+      "sha256": "a41e319d6196bec411a6cffc46e21058e5c28d785c2e0a6d297d33a2ff55d8d9"
+    },
+    {
+      "path": "site/admin.html",
+      "bytes": 40363,
+      "sha256": "42bde208c12e792e644e9c452aa18bf9def53a27586fb58351173c2ef6967356"
+    },
+    {
+      "path": "site/data.js",
+      "bytes": 1588138,
+      "sha256": "14444fc3bf3f4a7a5e22b9930a6141a7b7bf4d14775c2b85b87dadb2227b25f6"
+    },
+    {
+      "path": "site/js/server-admin.js",
+      "bytes": 70979,
+      "sha256": "9c124fb9e588e24732cf46d2bad640c46142857c75b19000b7a7c12538386ef5"
+    }
+  ],
+  "api_references": {
+    "/api/auth/me": [
+      "site/account-box.js",
+      "site/js/server-admin.js"
+    ],
+    "/api/auth/register": [
+      "site/account-box.js"
+    ],
+    "/api/auth/login": [
+      "site/account-box.js"
+    ],
+    "/api/auth/logout": [
+      "site/account-box.js"
+    ],
+    "/api/admin/users": [
+      "site/js/server-admin.js"
+    ],
+    "/api/admin/grant": [
+      "site/js/server-admin.js",
+      "site/js/server-admin.js",
+      "site/js/server-admin.js",
+      "site/js/server-admin.js"
+    ],
+    "/api/admin/simbot": [
+      "site/js/server-admin.js",
+      "site/js/server-admin.js"
+    ],
+    "/api/admin/users/wipe": [
+      "site/js/server-admin.js"
+    ],
+    "/api/admin/users/reset-progress": [
+      "site/js/server-admin.js"
+    ],
+    "/api/admin/users/": [
+      "site/js/server-admin.js",
+      "site/js/server-admin.js"
+    ],
+    "/api/admin/ranking": [
+      "site/js/server-admin.js",
+      "site/js/server-admin.js"
+    ],
+    "/api/admin/maintenance": [
+      "site/js/server-admin.js",
+      "site/js/server-admin.js"
+    ],
+    "/api/admin/server-open": [
+      "site/js/server-admin.js",
+      "site/js/server-admin.js",
+      "site/js/server-admin.js"
+    ],
+    "/api/admin/gift-codes": [
+      "site/js/server-admin.js",
+      "site/js/server-admin.js",
+      "site/js/server-admin.js",
+      "site/js/server-admin.js",
+      "site/js/server-admin.js",
+      "site/js/server-admin.js"
+    ],
+    "/api/admin/gift-codes/${id}": [
+      "site/js/server-admin.js",
+      "site/js/server-admin.js"
+    ],
+    "/api/admin/ktc-catalog": [
+      "site/js/server-admin.js",
+      "site/js/server-admin.js"
+    ]
+  }
+}

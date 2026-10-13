@@ -1,0 +1,49 @@
+{
+  "/api/auth/login": [
+    "site/js/auth.js"
+  ],
+  "/api/auth/logout": [
+    "site/js/auth.js"
+  ],
+  "/api/auth/me": [
+    "site/js/auth.js"
+  ],
+  "/api/auth/register": [
+    "site/js/auth.js"
+  ],
+  "/api/chat/messages": [
+    "site/assets/game.zBuLCNB4.js"
+  ],
+  "/api/chat/messages?limit=1": [
+    "site/assets/game.zBuLCNB4.js"
+  ],
+  "/api/chat/status": [
+    "site/assets/game.zBuLCNB4.js"
+  ],
+  "/api/chat/stream?client_id=${encodeURIComponent(Ce())}": [
+    "site/assets/game.zBuLCNB4.js"
+  ],
+  "/api/game/state": [
+    "site/js/auth.js"
+  ],
+  "/api/gift-codes/choose": [
+    "site/js/giftcode-modal.js"
+  ],
+  "/api/gift-codes/redeem": [
+    "site/js/giftcode-modal.js"
+  ],
+  "/api/public/server-open": [
+    "site/js/server-open-guard.js"
+  ],
+  "/api/public/simbot-status": [
+    "site/js/online-presence.js",
+    "site/js/simbot-train.js",
+    "site/play01.html"
+  ],
+  "/api/ranking": [
+    "site/js/server-ranking.js"
+  ],
+  "/api/world/presence": [
+    "site/js/online-presence.js"
+  ]
+}

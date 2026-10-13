@@ -1,0 +1,1059 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Võ Lâm H5 · Công Thành Chiến (Phiên Bản Đồ Xanh) · Hồi Ức Nguyên Bản – Cảm Xúc Vẹn Nguyên</title>
+  <meta name="description" content="Võ Lâm H5 - Công Thành Chiến phiên bản Đồ Xanh kinh điển 2005. Miễn phí trọn đời, phi thương mại. Thập đại môn phái, ngũ hành tương khắc, chiến trường Tống Kim rực lửa. Chơi ngay trên trình duyệt web!">
+  <link rel="canonical" href="https://volamh5.top/">
+  <meta property="og:title" content="Võ Lâm H5 · Công Thành Chiến - Phiên Bản Đồ Xanh Kinh Điển">
+  <meta property="og:description" content="Hồi Ức Nguyên Bản – Cảm Xúc Vẹn Nguyên. Miễn phí trọn đời, phi thương mại, chuẩn Đồ Xanh Công Thành Chiến 2005. Chơi ngay tại https://volamh5.top/">
+  <meta property="og:image" content="https://volamh5.top/img/gameplay-ctc.png">
+  <meta property="og:url" content="https://volamh5.top/">
+  <link rel="icon" type="image/png" href="/img/pl/shaolin.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       VÕ LÂM H5 · CÔNG THÀNH CHIẾN (PHIÊN BẢN ĐỒ XANH) - LUXURY PORTAL
+       Thiết kế cao cấp theo chuẩn bố cục hoài niệm:
+       - Header Banner: Hồi Ức Nguyên Bản – Cảm Xúc Vẹn Nguyên
+       - Thanh Menu Gỗ Lim Cổ Phong
+       - Box 1: Huyền Thoại Trở Lại (Tâm thư hoài niệm xúc động & Huy hiệu CTC)
+       - Box 2: Võ Lâm H5 - Phiên Bản Đồ Xanh (Khung ảnh game & Nút CHƠI NGAY lộng lẫy)
+       - Khối Đặc Sắc Đồ Xanh & Thập Đại Môn Phái
+       - Footer bản quyền volamh5.top
+       ========================================================================== */
+    :root {
+      --gold-100: #fef9c3;
+      --gold-300: #fde047;
+      --gold-400: #facc15;
+      --gold-500: #eab308;
+      --gold-600: #ca8a04;
+      --gold-700: #a16207;
+      --emerald-dark: #042f24;
+      --emerald-base: #064e3b;
+      --emerald-light: #059669;
+      --emerald-glow: #10b981;
+      --blue-doxanh: #38bdf8;
+      --wood-dark: #3b160b;
+      --wood-mid: #5c2410;
+      --wood-light: #853717;
+      --parchment-bg: #fffbeb;
+      --parchment-card: #fef3c7;
+      --parchment-dark: #fde68a;
+      --ink-dark: #451a03;
+      --ink-muted: #78350f;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #0c1210;
+      background-image: 
+        radial-gradient(circle at 50% 15%, rgba(6, 78, 59, 0.28) 0%, transparent 60%),
+        radial-gradient(circle at 15% 50%, rgba(180, 83, 9, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 85% 80%, rgba(6, 78, 59, 0.18) 0%, transparent 50%),
+        linear-gradient(180deg, #070e0b 0%, #0d1512 50%, #060a08 100%);
+      background-attachment: fixed;
+      color: #e2e8f0;
+      font-family: 'Be Vietnam Pro', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 14px 40px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Hiệu ứng hạt bụi vàng kiếm hiệp lấp lánh ngầm */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(1.5px 1.5px at 15% 20%, rgba(250, 204, 21, 0.35), transparent),
+                  radial-gradient(2px 2px at 75% 35%, rgba(250, 204, 21, 0.25), transparent),
+                  radial-gradient(1.5px 1.5px at 45% 65%, rgba(56, 189, 248, 0.25), transparent),
+                  radial-gradient(2px 2px at 85% 85%, rgba(250, 204, 21, 0.3), transparent);
+      background-size: 320px 320px;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.6;
+    }
+
+    /* Container chính: Khung viền hoàng kim uy nghi */
+    .portal-frame {
+      width: 100%;
+      max-width: 960px;
+      background: #0f1915;
+      border: 3px solid #ca8a04;
+      outline: 1.5px solid #713f12;
+      outline-offset: 4px;
+      border-radius: 12px;
+      box-shadow: 
+        0 0 0 1px rgba(254, 240, 138, 0.25),
+        0 15px 45px rgba(0, 0, 0, 0.85),
+        0 0 40px rgba(202, 138, 4, 0.22);
+      overflow: hidden;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Hoa văn góc mạ vàng cổ phong */
+    .corner-ornament {
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      border-color: #fde047;
+      border-style: solid;
+      pointer-events: none;
+      z-index: 10;
+    }
+    .corner-tl { top: 6px; left: 6px; border-width: 2px 0 0 2px; }
+    .corner-tr { top: 6px; right: 6px; border-width: 2px 2px 0 0; }
+    .corner-bl { bottom: 6px; left: 6px; border-width: 0 0 2px 2px; }
+    .corner-br { bottom: 6px; right: 6px; border-width: 0 2px 2px 0; }
+
+    /* ==========================================================================
+       1. HEADER BANNER: HỒI ỨC NGUYÊN BẢN – CẢM XÚC VẸN NGUYÊN
+       ========================================================================== */
+    .portal-banner {
+      background: linear-gradient(135deg, #032b20 0%, #064e3b 50%, #02241b 100%);
+      border-bottom: 2px solid #ca8a04;
+      padding: 24px 20px 20px;
+      text-align: center;
+      position: relative;
+      box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.65);
+    }
+    .portal-banner::after {
+      content: "";
+      position: absolute;
+      bottom: -1px;
+      left: 15%;
+      right: 15%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #fde047, transparent);
+    }
+
+    .banner-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(23px, 4.2vw, 36px);
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      background: linear-gradient(180deg, #ffffff 0%, #fef08a 35%, #facc15 70%, #ca8a04 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8), 0 0 16px rgba(250, 204, 21, 0.4);
+      margin-bottom: 6px;
+      line-height: 1.25;
+    }
+
+    .banner-sub {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(12px, 2vw, 15px);
+      color: #93c5fd;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 700;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+    .banner-sub span {
+      color: #fde047;
+    }
+    .banner-sub::before, .banner-sub::after {
+      content: "✦";
+      color: #ca8a04;
+      font-size: 11px;
+    }
+
+    /* ==========================================================================
+       2. THANH MENU ĐIỀU HƯỚNG GỖ CỔ PHONG
+       ========================================================================== */
+    .portal-nav {
+      background: linear-gradient(180deg, #6c2b10 0%, #4a1c09 50%, #2f1004 100%);
+      border-bottom: 2px solid #ca8a04;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(12px, 3.5vw, 36px);
+      padding: 11px 16px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.45);
+      flex-wrap: wrap;
+    }
+
+    .nav-link {
+      color: #fef08a;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+    .nav-link:hover, .nav-link.active {
+      color: #ffffff;
+      background: rgba(254, 240, 138, 0.15);
+      text-shadow: 0 0 10px #fde047;
+      transform: translateY(-1px);
+    }
+    .nav-divider {
+      color: #b45309;
+      font-size: 12px;
+      user-select: none;
+    }
+
+    /* Nút CTA mini trên menu */
+    .nav-play-btn {
+      background: linear-gradient(180deg, #10b981 0%, #047857 100%);
+      color: #ffffff !important;
+      border: 1px solid #34d399;
+      border-radius: 20px;
+      padding: 4px 14px !important;
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+      margin-left: 4px;
+    }
+    .nav-play-btn:hover {
+      background: linear-gradient(180deg, #34d399 0%, #059669 100%) !important;
+      box-shadow: 0 0 14px rgba(52, 211, 153, 0.8) !important;
+    }
+
+    /* NÚT ĐỎ CHỚP CHỚP NHẤP NHÁY NHÓM ZALO */
+    .nav-zalo-btn {
+      background: linear-gradient(180deg, #ef4444 0%, #dc2626 55%, #991b1b 100%) !important;
+      color: #ffffff !important;
+      border: 1.5px solid #fecaca !important;
+      border-radius: 20px !important;
+      padding: 4px 13px !important;
+      font-size: 13px !important;
+      font-weight: 800 !important;
+      letter-spacing: 0.5px !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      box-shadow: 0 0 14px rgba(239, 68, 68, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      animation: redBlinkPulse 1s infinite alternate ease-in-out;
+      cursor: pointer;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
+      position: relative;
+    }
+    .nav-zalo-btn:hover {
+      background: linear-gradient(180deg, #f87171 0%, #ef4444 55%, #b91c1c 100%) !important;
+      transform: translateY(-2px) scale(1.04);
+      box-shadow: 0 0 22px rgba(239, 68, 68, 1), 0 0 35px rgba(254, 202, 202, 0.9);
+    }
+
+    @keyframes redBlinkPulse {
+      0% {
+        box-shadow: 0 0 6px rgba(239, 68, 68, 0.4), inset 0 0 2px rgba(255, 255, 255, 0.3);
+        filter: brightness(0.95);
+        border-color: #fca5a5;
+      }
+      50% {
+        box-shadow: 0 0 22px rgba(239, 68, 68, 1), 0 0 34px rgba(254, 202, 202, 0.85), inset 0 0 8px rgba(255, 255, 255, 0.7);
+        filter: brightness(1.25);
+        border-color: #ffffff;
+      }
+      100% {
+        box-shadow: 0 0 6px rgba(239, 68, 68, 0.4), inset 0 0 2px rgba(255, 255, 255, 0.3);
+        filter: brightness(0.95);
+        border-color: #fca5a5;
+      }
+    }
+
+    .red-blinking-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 0 8px #ffffff, 0 0 14px #fef08a;
+      display: inline-block;
+      animation: dotPulse 0.6s infinite alternate;
+    }
+    @keyframes dotPulse {
+      0% { opacity: 0.3; transform: scale(0.6); }
+      100% { opacity: 1; transform: scale(1.3); }
+    }
+
+    .hot-badge {
+      background: #facc15;
+      color: #7f1d1d;
+      font-size: 9px;
+      font-weight: 900;
+      padding: 1px 5px;
+      border-radius: 4px;
+      line-height: 1.2;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+      border: 1px solid #fef08a;
+    }
+
+    /* Modal hiển thị QR Nhóm Zalo */
+    .zalo-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(5px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.25s ease;
+    }
+    .zalo-modal-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    .zalo-modal-box {
+      background: #0f1a15;
+      border: 2px solid #ca8a04;
+      border-radius: 12px;
+      max-width: 420px;
+      width: 100%;
+      padding: 24px 20px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9), 0 0 30px rgba(202, 138, 4, 0.3);
+      text-align: center;
+      position: relative;
+      transform: translateY(20px);
+      transition: transform 0.25s ease;
+    }
+    .zalo-modal-overlay.show .zalo-modal-box {
+      transform: translateY(0);
+    }
+    .zalo-modal-close {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      background: transparent;
+      border: none;
+      color: #fde047;
+      font-size: 22px;
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+    .zalo-modal-close:hover {
+      background: rgba(254, 224, 71, 0.15);
+    }
+    .zalo-qr-card {
+      background: #ffffff;
+      padding: 12px;
+      border-radius: 8px;
+      display: inline-block;
+      margin: 10px auto;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+    }
+    .zalo-qr-img {
+      max-width: 250px;
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 4px;
+    }
+    .btn-zalo-join {
+      background: linear-gradient(180deg, #0284c7 0%, #0369a1 100%);
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14.5px;
+      padding: 12px 24px;
+      border-radius: 30px;
+      border: 1.5px solid #38bdf8;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.5);
+      transition: all 0.2s;
+      margin-top: 6px;
+    }
+    .btn-zalo-join:hover {
+      background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(56, 189, 248, 0.7);
+    }
+
+    /* ==========================================================================
+       NỘI DUNG CHÍNH (CÁC KHUNG VÀNG KIM TRONG PORTAL)
+       ========================================================================== */
+    .portal-body {
+      padding: 18px 16px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      background: #0d1612;
+    }
+
+    /* Khung card màu vàng da giấy kiểu cổ trang */
+    .wuxia-card {
+      background: linear-gradient(180deg, #fffbeb 0%, #fef3c7 40%, #fde68a 100%);
+      border: 2px solid #b45309;
+      border-radius: 8px;
+      padding: 22px 24px;
+      box-shadow: 
+        inset 0 0 25px rgba(180, 83, 9, 0.16),
+        0 6px 18px rgba(0, 0, 0, 0.55);
+      position: relative;
+    }
+    .wuxia-card::before {
+      content: "";
+      position: absolute;
+      inset: 3px;
+      border: 1px dashed rgba(180, 83, 9, 0.4);
+      border-radius: 6px;
+      pointer-events: none;
+    }
+
+    /* Tiêu đề từng Card */
+    .card-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(17px, 2.5vw, 22px);
+      font-weight: 800;
+      color: #92400e;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+      border-bottom: 1.5px solid rgba(180, 83, 9, 0.35);
+      padding-bottom: 8px;
+    }
+    .card-title .icon {
+      color: #b45309;
+      font-size: 19px;
+    }
+
+    /* Đoạn văn hoài niệm (Tâm thư) */
+    .story-quote {
+      font-size: 14.5px;
+      line-height: 1.85;
+      color: #451a03;
+      font-style: italic;
+      text-align: justify;
+      margin-bottom: 16px;
+      position: relative;
+      padding: 0 6px;
+    }
+    .story-quote b {
+      color: #b45309;
+      font-style: normal;
+    }
+    .story-quote .highlight-domain {
+      background: rgba(180, 83, 9, 0.12);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-style: normal;
+      font-weight: 700;
+      color: #9a3412;
+      border: 1px solid rgba(180, 83, 9, 0.3);
+    }
+
+    /* 4 Thẻ Huy Hiệu Tinh Hoa CTC Đồ Xanh */
+    .feature-badges {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .badge-item {
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid #d97706;
+      border-radius: 6px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      box-shadow: 0 2px 6px rgba(180, 83, 9, 0.1);
+      transition: transform 0.2s, background 0.2s;
+    }
+    .badge-item:hover {
+      transform: translateY(-2px);
+      background: #ffffff;
+      border-color: #b45309;
+    }
+    .badge-icon {
+      font-size: 24px;
+      line-height: 1;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+    }
+    .badge-text b {
+      display: block;
+      color: #9a3412;
+      font-size: 13px;
+      margin-bottom: 2px;
+      font-weight: 700;
+    }
+    .badge-text small {
+      display: block;
+      color: #78350f;
+      font-size: 11.5px;
+      line-height: 1.4;
+    }
+
+    /* ==========================================================================
+       CARD 2: GAMEPLAY SHOWCASE & NÚT CHƠI NGAY HUYỀN THOẠI
+       ========================================================================== */
+    .gameplay-wrapper {
+      position: relative;
+      background: #000;
+      border: 2.5px solid #d97706;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 
+        0 0 0 1px rgba(254, 240, 138, 0.5),
+        0 8px 24px rgba(0, 0, 0, 0.65);
+      margin: 10px 0 18px;
+    }
+    .gameplay-img {
+      width: 100%;
+      height: auto;
+      max-height: 480px;
+      object-fit: contain;
+      display: block;
+      background: #050a08;
+      transition: transform 0.4s ease;
+    }
+    .gameplay-wrapper:hover .gameplay-img {
+      transform: scale(1.015);
+    }
+
+    /* Tag trạng thái trên ảnh */
+    .gameplay-tag {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(4, 47, 36, 0.92);
+      border: 1px solid #34d399;
+      color: #6ee7b7;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      backdrop-filter: blur(4px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+    }
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 8px #10b981;
+      animation: pulseAnim 1.8s infinite;
+    }
+    @keyframes pulseAnim {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    /* KHU VỰC NÚT CHƠI NGAY NỔI BẬT */
+    .cta-area {
+      text-align: center;
+      padding: 8px 0 6px;
+    }
+
+    /* Nút CHƠI NGAY viền vàng ngọc bích chuẩn mẫu nhưng cao cấp hơn */
+    .btn-play-now {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background: linear-gradient(180deg, #059669 0%, #047857 55%, #064e3b 100%);
+      border: 2px solid #fde047;
+      border-radius: 9999px;
+      color: #ffffff;
+      text-decoration: none;
+      font-family: 'Cinzel', Georgia, serif;
+      font-size: clamp(20px, 3.2vw, 26px);
+      font-weight: 900;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 14px 48px;
+      box-shadow: 
+        0 0 0 2px rgba(6, 78, 59, 0.8),
+        0 0 25px rgba(16, 185, 129, 0.65),
+        0 8px 24px rgba(0, 0, 0, 0.7);
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      animation: buttonGlow 2.5s infinite alternate;
+    }
+    @keyframes buttonGlow {
+      0% { box-shadow: 0 0 15px rgba(16, 185, 129, 0.5), 0 8px 20px rgba(0,0,0,0.6); }
+      100% { box-shadow: 0 0 35px rgba(250, 204, 21, 0.75), 0 0 25px rgba(16, 185, 129, 0.8), 0 10px 30px rgba(0,0,0,0.8); }
+    }
+    .btn-play-now::before {
+      content: "";
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+      transition: left 0.6s ease;
+    }
+    .btn-play-now:hover {
+      transform: translateY(-3px) scale(1.02);
+      background: linear-gradient(180deg, #10b981 0%, #059669 55%, #047857 100%);
+      border-color: #ffffff;
+      color: #ffffff;
+    }
+    .btn-play-now:hover::before {
+      left: 100%;
+    }
+    .btn-play-now:active {
+      transform: translateY(1px) scale(0.99);
+    }
+
+    .play-note {
+      font-size: 12.5px;
+      color: #78350f;
+      font-weight: 600;
+      margin-top: 8px;
+    }
+
+    /* Các nút thao tác nhanh (Copy Link, BXH, Admin) */
+    .quick-actions-bar {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+    .action-btn {
+      background: rgba(180, 83, 9, 0.12);
+      border: 1px solid #b45309;
+      border-radius: 6px;
+      color: #78350f;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .action-btn:hover {
+      background: #b45309;
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    /* ==========================================================================
+       CARD 3: TỔNG QUAN THẬP ĐẠI MÔN PHÁI (NGŨ HÀNH TƯƠNG KHẮC)
+       ========================================================================== */
+    .sects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .sect-card {
+      background: rgba(255, 255, 255, 0.65);
+      border: 1px solid #d97706;
+      border-radius: 6px;
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sect-card img {
+      width: 32px;
+      height: 32px;
+      border-radius: 4px;
+      background: #14221b;
+      border: 1px solid #b45309;
+      image-rendering: pixelated;
+    }
+    .sect-info b {
+      display: block;
+      font-size: 13px;
+      color: #9a3412;
+    }
+    .sect-info small {
+      font-size: 11px;
+      color: #78350f;
+      display: block;
+    }
+
+    /* ==========================================================================
+       FOOTER BẢN QUYỀN CHUẨN XỊN
+       ========================================================================== */
+    .portal-footer {
+      background: linear-gradient(180deg, #1b0e07 0%, #100804 100%);
+      border-top: 2px solid #ca8a04;
+      padding: 18px 20px 22px;
+      text-align: center;
+      font-size: 12px;
+      color: #a89481;
+      line-height: 1.8;
+    }
+    .portal-footer a {
+      color: #fde047;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .portal-footer a:hover {
+      text-decoration: underline;
+    }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* Toast thông báo sao chép link */
+    #copyToast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #064e3b;
+      border: 1.5px solid #34d399;
+      color: #fff;
+      padding: 10px 22px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 700;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+      z-index: 999;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    #copyToast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    @media (max-width: 640px) {
+      body { padding: 10px 6px 24px; }
+      .portal-banner { padding: 18px 12px 16px; }
+      .portal-nav { gap: 12px; padding: 10px 8px; }
+      .nav-link { font-size: 12.5px; }
+      .wuxia-card { padding: 16px 14px; }
+      .btn-play-now { padding: 12px 28px; font-size: 18px; letter-spacing: 1.5px; width: 100%; }
+      .feature-badges { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Khung Portal Cổ Trang Hoàng Kim (Centered Boxed Layout) -->
+  <div class="portal-frame">
+    <!-- Hoa văn 4 góc mạ vàng -->
+    <div class="corner-ornament corner-tl"></div>
+    <div class="corner-ornament corner-tr"></div>
+    <div class="corner-ornament corner-bl"></div>
+    <div class="corner-ornament corner-br"></div>
+
+    <!-- 1. Header Banner: Hồi Ức Nguyên Bản – Cảm Xúc Vẹn Nguyên -->
+    <header class="portal-banner">
+      <h1 class="banner-title">Hồi Ức Nguyên Bản – Cảm Xúc Vẹn Nguyên</h1>
+      <div class="banner-sub">
+        <span>Võ Lâm H5</span> · Công Thành Chiến Đồ Xanh · <span>volamh5.top</span>
+      </div>
+    </header>
+
+    <!-- 2. Navigation Bar: Thanh Menu Gỗ Lim Cổ Phong -->
+    <nav class="portal-nav" aria-label="Điều hướng">
+      <a href="/" class="nav-link active">Trang Chủ</a>
+      <span class="nav-divider">|</span>
+      <a href="#gioi-thieu" class="nav-link">Giới Thiệu</a>
+      <span class="nav-divider">|</span>
+      <a href="#mon-phai" class="nav-link">Môn Phái</a>
+      <span class="nav-divider">|</span>
+      <a href="https://zalo.me/g/spnv6daqu8lvtilahypo" target="_blank" rel="noopener noreferrer" class="nav-link nav-zalo-btn" id="navZaloBtn" title="Tham gia Nhóm Zalo Giao Lưu & Hỗ Trợ">
+        <span class="red-blinking-dot"></span>
+        Nhóm Zalo
+        <span class="hot-badge">HOT</span>
+      </a>
+      <a href="/play01" class="nav-link nav-play-btn">⚔ Vào Game ↗</a>
+    </nav>
+
+    <!-- Nội dung chính -->
+    <main class="portal-body">
+
+      <!-- 3. BOX 1: HUYỀN THOẠI TRỞ LẠI (Tâm thư hoài niệm & Đặc sắc) -->
+      <section class="wuxia-card" id="gioi-thieu">
+        <h2 class="card-title">
+          <span class="icon">📜</span> HUYỀN THOẠI TRỞ LẠI
+        </h2>
+        
+        <p class="story-quote">
+          “Nhớ ngày nào ta cùng nhau thức trắng đêm nơi quán net xưa, tiếng bàn phím cơ lạch cạch hòa cùng tiếng nhạc nền thành Biện Kinh, Phượng Tường quen thuộc...<br><br>
+          Nơi đây, mọi thứ đều <b>MIỄN PHÍ TRỌN ĐỜI · PHI THƯƠNG MẠI</b>. Không danh lợi, không nạp VIP hút máu, chỉ có tình anh em, sự công bằng tuyệt đối và những trận chiến định đoạt bằng thực lực.<br><br>
+          Hãy để thanh xuân thêm một lần rực lửa cùng <b>Võ Lâm H5 – Công Thành Chiến (Phiên Bản Đồ Xanh)</b> tại <span class="highlight-domain">https://volamh5.top/</span>!”
+        </p>
+
+        <!-- 4 Huy hiệu tính năng nổi bật -->
+        <div class="feature-badges">
+          <div class="badge-item">
+            <div class="badge-icon">🛡</div>
+            <div class="badge-text">
+              <b>Chuẩn CTC 2005</b>
+              <small>Thập đại môn phái, ngũ hành tương khắc nguyên bản.</small>
+            </div>
+          </div>
+
+          <div class="badge-item">
+            <div class="badge-icon">💎</div>
+            <div class="badge-text">
+              <b>Kỷ Nguyên Đồ Xanh</b>
+              <small>Hút nội lực, hút sinh lực, tốc đánh. Đồ HK: An Bang & Định Quốc.</small>
+            </div>
+          </div>
+
+          <div class="badge-item">
+            <div class="badge-icon">⚔</div>
+            <div class="badge-text">
+              <b>Tống Kim Rực Lửa</b>
+              <small>Chiến trường 380 mỗi 30 phút, Boss Hoàng Kim, Vượt Ải.</small>
+            </div>
+          </div>
+
+          <div class="badge-item">
+            <div class="badge-icon">📱</div>
+            <div class="badge-text">
+              <b>Chơi Mượt Mọi Thiết Bị</b>
+              <small>Không tải bộ cài, mở web trên PC, iPhone, Android chiến ngay!</small>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. BOX 2: SHOWCASE INGAME & NÚT CHƠI NGAY HUYỀN THOẠI -->
+      <section class="wuxia-card">
+        <h2 class="card-title">
+          <span class="icon">⚔</span> VÕ LÂM H5 · CÔNG THÀNH CHIẾN – ĐỒ XANH KINH ĐIỂN
+        </h2>
+
+        <!-- Khung ảnh Gameplay thực tế sắc nét -->
+        <div class="gameplay-wrapper">
+          <img src="/img/gameplay-ctc.png" alt="Võ Lâm H5 Công Thành Chiến Đồ Xanh Gameplay" class="gameplay-img" loading="eager">
+          <div class="gameplay-tag">
+            <span class="pulse-dot"></span> SERVER 01 ONLINE · MIỄN PHÍ TRỌN ĐỜI
+          </div>
+        </div>
+
+        <!-- Nút CHƠI NGAY lộng lẫy tâm điểm -->
+        <div class="cta-area">
+          <a href="/play01" class="btn-play-now" id="btnPlayMain" title="Vào chơi ngay Võ Lâm H5 Server 01">
+            <span>⚔</span> CHƠI NGAY <span>⚔</span>
+          </a>
+          <div class="play-note">
+            ★ Chơi trực tiếp trên trình duyệt Web · Tự lưu nhân vật theo tài khoản ★
+          </div>
+
+          <!-- Các nút thao tác nhanh -->
+          <div class="quick-actions-bar">
+            <button type="button" class="action-btn" onclick="copyGameLink()">
+              📋 Sao chép Link Game (volamh5.top)
+            </button>
+            <button type="button" class="action-btn" onclick="openZaloModal()" style="background:rgba(220,38,38,0.18);border-color:#ef4444;color:#fca5a5">
+              💬 Nhóm Zalo (Quét QR)
+            </button>
+            <a href="/play01" class="action-btn">
+              🏆 Bảng Xếp Hạng Server
+            </a>
+            <a href="/admin.html" class="action-btn">
+              ⚙ Quản Trị
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. BOX 3: THẬP ĐẠI MÔN PHÁI CHUẨN NGŨ HÀNH -->
+      <section class="wuxia-card" id="mon-phai">
+        <h2 class="card-title">
+          <span class="icon">☯</span> THẬP ĐẠI MÔN PHÁI (NGŨ HÀNH TƯƠNG KHẮC)
+        </h2>
+        
+        <div class="sects-grid">
+          <div class="sect-card">
+            <img src="/img/pl/shaolin.png" alt="Thiếu Lâm">
+            <div class="sect-info">
+              <b style="color:#ca8a04">Thiếu Lâm</b>
+              <small>Hệ Kim · Quyền, Đao, Bổng</small>
+            </div>
+          </div>
+          <div class="sect-card">
+            <img src="/img/pl/tianwang.png" alt="Thiên Vương">
+            <div class="sect-info">
+              <b style="color:#ca8a04">Thiên Vương</b>
+              <small>Hệ Kim · Thương, Chùy, Đao</small>
+            </div>
+          </div>
+          <div class="sect-card">
+            <img src="/img/pl/tangmen.png" alt="Đường Môn">
+            <div class="sect-info">
+              <b style="color:#16a34a">Đường Môn</b>
+              <small>Hệ Mộc · Phi Đao, Tiêu, Nỏ</small>
+            </div>
+          </div>
+          <div class="sect-card">
+            <img src="/img/pl/wudu.png" alt="Ngũ Độc">
+            <div class="sect-info">
+              <b style="color:#16a34a">Ngũ Độc</b>
+              <small>Hệ Mộc · Đao, Chưởng, Bùa</small>
+            </div>
+          </div>
+          <div class="sect-card">
+            <img src="/img/pl/emei.png" alt="Nga My">
+            <div class="sect-info">
+              <b style="color:#0284c7">Nga My</b>
+              <small>Hệ Thủy · Kiếm, Chưởng, Buff</small>
+            </div>
+          </div>
+          <div class="sect-card">
+            <img src="/img/pl/cuiyan.png" alt="Thúy Yên">
+            <div class="sect-info">
+              <b style="color:#0284c7">Thúy Yên</b>
+              <small>Hệ Thủy · Đao, Song Đao</small>
+            </div>
+          </div>
+          <div class="sect-card">
+            <img src="/img/pl/gaibang.png" alt="Cái Bang">
+            <div class="sect-info">
+              <b style="color:#dc2626">Cái Bang</b>
+              <small>Hệ Hỏa · Chưởng Rồng, Bổng</small>
+            </div>
+          </div>
+          <div class="sect-card">
+            <img src="/img/pl/tianren.png" alt="Thiên Nhẫn">
+            <div class="sect-info">
+              <b style="color:#dc2626">Thiên Nhẫn</b>
+              <small>Hệ Hỏa · Kích, Đao</small>
+            </div>
+          </div>
+          <div class="sect-card">
+            <img src="/img/pl/wudang.png" alt="Võ Đang">
+            <div class="sect-info">
+              <b style="color:#d97706">Võ Đang</b>
+              <small>Hệ Thổ · Khí Kiếm, Quyền</small>
+            </div>
+          </div>
+          <div class="sect-card">
+            <img src="/img/pl/kunlun.png" alt="Côn Lôn">
+            <div class="sect-info">
+              <b style="color:#d97706">Côn Lôn</b>
+              <small>Hệ Thổ · Đao, Kiếm</small>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- 6. FOOTER BẢN QUYỀN SANG TRỌNG -->
+    <footer class="portal-footer">
+      <div>© 2026 <a href="https://volamh5.top/">volamh5.top</a> · Võ Lâm H5 Công Thành Chiến (Phiên Bản Đồ Xanh)</div>
+      <div style="color:#78695d;margin-top:2px">Máy chủ game kiếm hiệp nhàn rỗi phi thương mại · Dành tặng cộng đồng đam mê hoài niệm 2005.</div>
+      <div class="footer-links">
+        <a href="/play01">🎮 Vào Chơi Game</a>
+        <span>·</span>
+        <a href="#gioi-thieu">📜 Giới Thiệu CTC</a>
+        <span>·</span>
+        <a href="#mon-phai">⚔ Thập Đại Môn Phái</a>
+        <span>·</span>
+        <a href="/admin.html">🛡 Quản Trị Máy Chủ</a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Modal Quét Mã / Tham Gia Nhóm Zalo -->
+  <div id="zaloModal" class="zalo-modal-overlay" onclick="closeZaloModal(event)">
+    <div class="zalo-modal-box">
+      <button type="button" class="zalo-modal-close" onclick="closeZaloModal()" aria-label="Đóng">✕</button>
+      <div style="margin-bottom:12px">
+        <h3 style="font-family:'Playfair Display',Georgia,serif;color:#fde047;font-size:21px;margin-bottom:4px">💬 CỘNG ĐỒNG NHÓM ZALO</h3>
+        <p style="color:#93c5fd;font-size:13px">JX Offlice 2026 · Giao lưu, báo lỗi & nhận thông báo sớm</p>
+      </div>
+      <div class="zalo-qr-card">
+        <img src="/img/zalo-qr.png" alt="Mã QR Nhóm Zalo JX Offlice 2026" class="zalo-qr-img">
+      </div>
+      <p style="font-size:13px;color:#cbd5e1;margin:12px 0 14px">
+        Mở ứng dụng <b>Zalo</b> trên điện thoại để quét mã QR hoặc bấm nút bên dưới:
+      </p>
+      <a href="https://zalo.me/g/spnv6daqu8lvtilahypo" target="_blank" rel="noopener noreferrer" class="btn-zalo-join">
+        👉 THAM GIA NHÓM ZALO NGAY ↗
+      </a>
+      <div style="font-size:12px;color:#94a3b8;margin-top:10px">
+        Link nhóm: <span style="color:#38bdf8;font-family:monospace">zalo.me/g/spnv6daqu8lvtilahypo</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast thông báo -->
+  <div id="copyToast">
+    <span>✔</span> Đã sao chép link game: <b>https://volamh5.top/</b>. Hãy gửi ngay cho bạn bè!
+  </div>
+
+  <script>
+    function openZaloModal() {
+      const m = document.getElementById('zaloModal');
+      if (m) m.classList.add('show');
+    }
+
+    function closeZaloModal(e) {
+      if (!e || e.target.id === 'zaloModal' || e.target.classList.contains('zalo-modal-close')) {
+        const m = document.getElementById('zaloModal');
+        if (m) m.classList.remove('show');
+      }
+    }
+
+    function copyGameLink() {
+      const link = 'https://volamh5.top/';
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(link).then(showToast);
+      } else {
+        const input = document.createElement('input');
+        input.value = link;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+        showToast();
+      }
+    }
+
+    function showToast() {
+      const toast = document.getElementById('copyToast');
+      if (!toast) return;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+  </script>
+</body>
+</html>

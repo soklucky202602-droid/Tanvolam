@@ -1,0 +1,725 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quản Trị Võ Lâm H5 - Bản Công Thành Chiến</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  font: 15px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #0d1411;
+  color: #e9f4ee;
+  max-width: 1080px;
+  margin: 20px auto;
+  padding: 0 16px;
+}
+h1, h2, h3 { margin: 0; color: #ffd24a; font-family: inherit; }
+h1 { font-size: 22px; display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+input, select, button { font: inherit; padding: 8px 12px; border-radius: 6px; }
+input[type="text"], input[type="number"], select {
+  background: #080e0c;
+  border: 1px solid #365042;
+  color: #fff;
+}
+input:focus, select:focus { outline: none; border-color: #ffd24a; }
+button { cursor: pointer; transition: all 0.15s ease; }
+table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+th, td { padding: 9px 12px; border-bottom: 1px solid #20352b; }
+th { background: #13221b; color: #ffd24a; font-weight: 600; }
+tr:hover { background: #15271e; }
+.card {
+  background: #111e18;
+  border: 1px solid #2d4c3c;
+  border-radius: 10px;
+  padding: 18px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  border-bottom: 1px solid #233e31;
+  padding-bottom: 10px;
+  margin-bottom: 14px;
+}
+.online-pulse {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #44e37a;
+  box-shadow: 0 0 8px #44e37a;
+  margin-right: 6px;
+}
+.btn-primary {
+  background: linear-gradient(180deg, #32965e, #1e6b3f);
+  border: 1px solid #44e37a;
+  color: #fff;
+  font-weight: bold;
+}
+.btn-gold {
+  background: linear-gradient(180deg, #d4a024, #a3740e);
+  border: 1px solid #ffd24a;
+  color: #1a1202;
+  font-weight: bold;
+}
+.btn-sub {
+  background: #192d23;
+  border: 1px solid #365042;
+  color: #d1e5db;
+}
+.btn-sub:hover { background: #244133; color: #fff; }
+.quick-btn {
+  padding: 4px 8px;
+  font-size: 12px;
+  background: #182e23;
+  border: 1px solid #365042;
+  color: #c9ded3;
+  border-radius: 4px;
+}
+.quick-btn:hover { background: #284c3a; color: #ffd24a; border-color: #ffd24a; }
+
+/* Form Tạo vật phẩm theo ý */
+.admin-item-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.admin-item-meta { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.admin-item-field { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: #a8c7b0; }
+.admin-item-field input, .admin-item-field select { width: 100%; }
+.admin-item-section-title { color: #ffd24a; font-size: 14px; margin: 12px 0 8px 0; display: block; }
+.admin-item-affixes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.admin-item-affix {
+  background: #09120e;
+  border: 1px solid #233e31;
+  border-radius: 6px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.admin-item-affix-label { font-size: 12px; color: #ffd24a; font-weight: 600; }
+.admin-item-affix-controls { display: flex; gap: 8px; align-items: center; }
+.admin-item-affix-controls select { flex: 1; }
+.admin-item-affix-controls input { width: 90px; text-align: right; }
+.admin-item-preview {
+  background: #09120e;
+  border: 1.5px solid #d4a024;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 14px 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 64px;
+}
+.admin-item-preview img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  background: #14221b;
+  border: 1px solid #365042;
+  border-radius: 4px;
+  padding: 2px;
+}
+.admin-item-preview-text b { color: #ffd24a; font-size: 15px; display: block; }
+.admin-item-preview-text small { color: #8bb098; font-size: 12px; }
+.admin-item-preview-affixes { margin-top: 4px; font-size: 12px; color: #b6d5c3; }
+.admin-item-preview-affixes div { margin: 2px 0; }
+</style>
+</head>
+<body>
+
+<h1>⚔ Quản Trị Máy Chủ Võ Lâm H5 · Bản Công Thành Chiến</h1>
+
+<!-- 1. Thanh trạng thái & Thống kê -->
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap">
+  <div style="background:#13291d;border:1.5px solid #2e8b57;padding:8px 16px;border-radius:8px;display:inline-flex;align-items:center;gap:8px">
+    <span class="online-pulse"></span>
+    <span style="font-size:14px">Đang Online: <b id="onlineCount" style="color:#44e37a;font-size:18px">0</b> người <small style="color:#8bb098">(người chơi thật)</small></span>
+  </div>
+  <div style="background:#17251d;border:1px solid #364;padding:8px 16px;border-radius:8px">
+    <span style="font-size:14px">Tổng tài khoản: <b id="totalUsers" style="color:#ffd24a;font-size:18px">0</b></span>
+  </div>
+  <button id="btnReload" class="btn-sub" style="padding:8px 14px;font-weight:600">🔄 Làm mới</button>
+  <button id="btnResetProgress" type="button" class="btn-sub" style="padding:8px 14px;background:#78350f;border:1px solid #d97706;color:#fde68a;font-weight:bold" onclick="window.resetAllCharactersProgress()">⚡ Reset Toàn Bộ (Lv 1 · 0 Vạn · Ải 1)</button>
+  <button id="btnWipeOldUsers" type="button" class="btn-sub" style="padding:8px 14px;background:#451212;border:1px solid #b91c1c;color:#fca5a5;font-weight:bold" onclick="window.wipeAllOldUsers()">🗑 Xóa tất cả acc cũ</button>
+  <label style="font-size:13px;color:#a8c7b0;cursor:pointer;display:inline-flex;align-items:center;gap:6px">
+    <input type="checkbox" id="autoRefresh" checked> Tự cập nhật (5s)
+  </label>
+  <a href="/play01" target="_blank" class="btn-sub" style="text-decoration:none;padding:8px 14px;color:#ffd24a;margin-left:auto;font-weight:bold">🎮 Vào game test</a>
+</div>
+
+<!-- KHAI MỞ MÁY CHỦ (OPEN SERVER 13H30) -->
+<section class="card" style="border:1.5px solid #d97706;background:#1e140a;margin-bottom:20px">
+  <div class="card-header" style="border-color:#5c350c;padding-bottom:12px">
+    <div style="display:flex;align-items:center;gap:12px">
+      <span style="font-size:26px">⏰</span>
+      <div>
+        <h2 style="font-size:18px;color:#fbbf24">Trạng Thái Khai Mở Máy Chủ (Open Server)</h2>
+        <div style="font-size:13px;color:#fde68a;margin-top:2px">Quản lý giờ Open server. Khi chưa đến giờ, người chơi ở trong thành Biện Kinh, click "Trở lại ải" sẽ hiện thông báo.</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <span id="serverOpenBadge" style="padding:4px 12px;border-radius:20px;font-size:13px;font-weight:bold;background:#451a03;color:#fca5a5;border:1px solid #dc2626">Đang Khóa Ải (Chờ Open)</span>
+      <button id="btnToggleForceOpen" type="button" class="btn-primary" style="padding:6px 14px;font-size:13px" onclick="window.toggleForceOpenServer()">Mở Ngay (Force Open)</button>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+    <div style="font-size:13.5px;color:#fef08a">
+      Thời gian Open: <input type="text" id="inputOpenTime" value="2026-10-10T13:30:00+07:00" style="padding:4px 8px;font-size:13px;width:230px">
+    </div>
+    <button id="btnSaveOpenTime" type="button" class="btn-gold" style="padding:6px 12px;font-size:13px" onclick="window.saveServerOpenTime()">Lưu Giờ Mở</button>
+    <div id="adminOpenCountdown" style="font-size:13.5px;color:#38bdf8;font-weight:bold;margin-left:auto">Đang tính thời gian...</div>
+  </div>
+</section>
+
+<!-- BẢO TRÌ MÁY CHỦ (MAINTENANCE MODE) -->
+<section class="card" style="border:1.5px solid #ef4444;background:#200b0b;margin-bottom:20px" id="adminMaintenanceSection">
+  <div class="card-header" style="border-color:#5c1d1d;padding-bottom:12px">
+    <div style="display:flex;align-items:center;gap:12px">
+      <span style="font-size:26px">🛠️</span>
+      <div>
+        <h2 style="font-size:18px;color:#f87171">Chế Độ Bảo Trì Máy Chủ (Maintenance Mode)</h2>
+        <div style="font-size:13px;color:#fca5a5;margin-top:2px">
+          Khi BẬT: Người chơi từ bên ngoài (volamh5.top) sẽ thấy <b>Bảng Thông Báo Bảo Trì</b> và không thể vào game. Bạn vẫn có thể truy cập <b>Local (localhost:8092)</b> để update & test code!
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <span id="maintStatusBadge" style="padding:5px 12px;border-radius:20px;font-size:13px;font-weight:bold;background:#451a03;color:#fca5a5;border:1px solid #dc2626">
+        Đang tải...
+      </span>
+      <button id="btnToggleMaintenance" type="button" class="btn-primary" style="padding:6px 16px;font-size:13px;font-weight:bold" onclick="window.toggleMaintenanceAdmin()">
+        Chuyển Trạng Thái
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- BẬT / TẮT SIMBOT (BOT ẢO LUYỆN CÔNG & KÊNH CHAT) -->
+<section class="card" style="border:1.5px solid #3b82f6;background:#0d1829;margin-bottom:20px">
+  <div class="card-header" style="border-color:#1e3a5f;padding-bottom:12px">
+    <div style="display:flex;align-items:center;gap:12px">
+      <span style="font-size:26px">🤖</span>
+      <div>
+        <h2 style="font-size:18px;color:#60a5fa">Hệ Thống Simbot (Bot Ảo Luyện Công & Kênh Chat)</h2>
+        <div style="font-size:13px;color:#93c5fd;margin-top:2px">Điều khiển 16 cao thủ ảo cày cấp, đánh quái trên các map và giao lưu trên kênh thế giới</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <span id="simbotStatusBadge" style="padding:5px 12px;border-radius:20px;font-size:13px;font-weight:bold;background:#064e3b;color:#34d399;border:1px solid #059669">
+        ● ĐANG BẬT
+      </span>
+      <button id="btnToggleSimbot" type="button" onclick="window.toggleSimbot()" style="padding:8px 18px;font-weight:bold;font-size:14px;border-radius:6px;cursor:pointer;background:#dc2626;color:#fff;border:1px solid #ef4444;transition:all 0.15s">
+        🛑 Tắt Simbot
+      </button>
+    </div>
+  </div>
+  <div style="font-size:13px;color:#94a3b8;display:flex;gap:24px;flex-wrap:wrap">
+    <span>• <b>Bãi luyện công:</b> 16 Bot ảo tự chạy, xuất chiêu và diệt quái</span>
+    <span>• <b>Kênh thế giới:</b> Tự động phản hồi và đàm đạo võ lâm</span>
+    <span>• <b>Khi TẮT:</b> Toàn bộ bot lập tức biến mất khỏi bản đồ, không chiếm quái và ngừng chat thế giới</span>
+  </div>
+</section>
+
+<!-- 2. Danh sách người chơi -->
+<section class="card">
+  <div class="card-header">
+    <h2 style="font-size:17px">👥 Danh Sách Tài Khoản & Người Chơi</h2>
+    <div style="display:flex;align-items:center;gap:10px">
+      <span id="filteredCount" style="font-size:13px;color:#ffd24a"></span>
+      <button type="button" class="btn-sub" style="padding:4px 10px;font-size:12px;background:#451212;border:1px solid #b91c1c;color:#fca5a5;font-weight:bold" onclick="window.wipeAllOldUsers()">🗑 Xóa tất cả acc cũ</button>
+    </div>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+    <input id="userSearch" type="text" placeholder="🔍 Gõ tài khoản hoặc tên nhân vật để lọc..." style="flex:1;min-width:240px">
+    <label style="font-size:13px;color:#a8c7b0;cursor:pointer;display:inline-flex;align-items:center;gap:6px;user-select:none">
+      <input type="checkbox" id="filterOnline"> Chỉ hiện Online
+    </label>
+    <button id="btnClearSearch" type="button" class="btn-sub" style="padding:6px 12px;font-size:13px">Xóa lọc</button>
+  </div>
+
+  <div style="max-height:280px;overflow-y:auto;border:1px solid #233e31;border-radius:6px">
+    <table>
+      <thead>
+        <tr>
+          <th style="text-align:left">Tài khoản</th>
+          <th style="text-align:center">Trạng thái</th>
+          <th style="text-align:left">Nhân vật & Cấp độ</th>
+          <th style="text-align:left">Hoạt động</th>
+          <th style="text-align:center">Thao tác</th>
+        </tr>
+      </thead>
+      <tbody id="users"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- QUẢN LÝ & TẠO GIFTCODE (DÙNG 1 LẦN: 5 TIÊN THẢO LỘ + 5 KNB) -->
+<section class="card" style="border:1.5px solid #a855f7;background:#130b1c;margin-bottom:20px" id="adminGiftCodeSection">
+  <div class="card-header" style="border-color:#3b1e52;padding-bottom:12px">
+    <div style="display:flex;align-items:center;gap:12px">
+      <span style="font-size:26px">🎁</span>
+      <div>
+        <h2 style="font-size:18px;color:#c084fc">Quản Lý & Tạo GiftCode (Code Tân Thủ & Code VIP)</h2>
+        <div style="font-size:13px;color:#e9d5ff;margin-top:2px">
+          Mỗi nhân vật chỉ dùng được <b>Code Tân Thủ</b> 1 lần và <b>Code VIP</b> 1 lần! Code VIP có <b>10 TTL + 10 KNB + Ngựa Chiếu Dạ</b>.
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <button id="btnReloadGiftCodes" type="button" onclick="window.loadGiftCodesAdmin()" class="btn-sub" style="padding:6px 14px;font-size:13px">
+        🔄 Làm mới mã
+      </button>
+    </div>
+  </div>
+
+  <!-- Nút tạo nhanh 1-Click: Code Tân Thủ & Code VIP -->
+  <div style="background:#1e102d;border:1px solid #58247a;border-radius:8px;padding:12px 16px;margin-bottom:14px;display:flex;flex-direction:column;gap:10px">
+    <!-- Hàng Code Tân Thủ -->
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <span style="font-size:13px;color:#a7f3d0;font-weight:bold;min-width:180px">🌿 Code Tân Thủ (5 TTL + 5 KNB):</span>
+      <button type="button" class="btn-primary" style="background:linear-gradient(180deg,#059669,#047857);border:1px solid #34d399;padding:6px 14px;font-size:12.5px;font-weight:bold" onclick="window.quickCreateSingleTtlCode()">
+        🎁 Tạo 1 Mã (Tự Copy)
+      </button>
+      <button type="button" class="btn-sub" style="border-color:#34d399;color:#a7f3d0;padding:6px 12px;font-size:12.5px" onclick="window.quickBatchCreateTtlCodes(5)">
+        ⚡ Tạo 5 Mã
+      </button>
+      <button type="button" class="btn-sub" style="border-color:#34d399;color:#a7f3d0;padding:6px 12px;font-size:12.5px" onclick="window.quickBatchCreateTtlCodes(10)">
+        ⚡ Tạo 10 Mã
+      </button>
+    </div>
+
+    <!-- Hàng Code VIP -->
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <span style="font-size:13px;color:#fde047;font-weight:bold;min-width:180px">👑 Code VIP (10 TTL + 10 KNB + Ngựa):</span>
+      <button type="button" class="btn-primary" style="background:linear-gradient(180deg,#d97706,#b45309);border:1px solid #facc15;padding:6px 14px;font-size:12.5px;font-weight:bold" onclick="window.quickCreateSingleVipCode()">
+        👑 Tạo 1 Mã VIP (Tự Copy)
+      </button>
+      <button type="button" class="btn-sub" style="border-color:#facc15;color:#fef08a;padding:6px 12px;font-size:12.5px" onclick="window.quickBatchCreateVipCodes(5)">
+        ⭐ Tạo 5 Mã VIP
+      </button>
+      <button type="button" class="btn-sub" style="border-color:#facc15;color:#fef08a;padding:6px 12px;font-size:12.5px" onclick="window.quickBatchCreateVipCodes(10)">
+        ⭐ Tạo 10 Mã VIP
+      </button>
+      <span id="giftCodeQuickStatus" style="font-size:13px;color:#44e37a;font-weight:600;margin-left:auto"></span>
+    </div>
+  </div>
+
+  <!-- Form tạo GiftCode tùy chỉnh -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:10px;background:#0d0614;border:1px solid #2e1240;border-radius:8px;padding:12px;margin-bottom:14px;align-items:end">
+    <div>
+      <label style="font-size:12.5px;color:#d8b4fe;display:block;margin-bottom:4px;font-weight:600">Mã GiftCode (3-32 ký tự):</label>
+      <div style="display:flex;gap:6px">
+        <input id="customGcCode" type="text" placeholder="Để trống = mã ngẫu nhiên" style="width:100%;text-transform:uppercase;font-size:13px;font-weight:bold;color:#facc15">
+        <button type="button" class="quick-btn" onclick="window.generateRandomGcCodeInput()" title="Tạo mã ngẫu nhiên">🎲</button>
+      </div>
+    </div>
+    <div>
+      <label style="font-size:12.5px;color:#d8b4fe;display:block;margin-bottom:4px;font-weight:600">Phần thưởng quà tặng:</label>
+      <select id="customGcKind" style="width:100%;font-size:13px">
+        <option value="tanthu" selected>🌿 Code Tân Thủ (5 Bình Tiên Thảo Lộ + 5 KNB)</option>
+        <option value="vip">👑 Code VIP (10 TTL + 10 KNB + Ngựa Chiếu Dạ Ngọc Sư Tử)</option>
+        <option value="kimphong">👑 Bộ Kim Phong + 5 Tiên Thảo Lộ + 5 KNB</option>
+        <option value="faction">⚔ Bộ Hoàng Kim Môn Phái</option>
+        <option value="set">🛡 Bộ An Bang / Định Quốc</option>
+      </select>
+    </div>
+    <div style="max-width:140px">
+      <label style="font-size:12.5px;color:#d8b4fe;display:block;margin-bottom:4px;font-weight:600">Lượt dùng tối đa:</label>
+      <input id="customGcMaxUses" type="number" min="1" max="100000" value="1" style="width:100%;font-size:13px;font-weight:bold;color:#facc15">
+    </div>
+    <div>
+      <button type="button" class="btn-gold" style="width:100%;padding:8px 16px;font-size:13.5px" onclick="window.createCustomGiftCode()">
+        ➕ Tạo Mã Ngay
+      </button>
+    </div>
+  </div>
+
+  <!-- Danh sách các GiftCode trong hệ thống -->
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap">
+    <input id="gcSearchInput" type="text" oninput="window.renderGiftCodesAdmin()" placeholder="🔍 Tìm theo mã code hoặc người dùng..." style="padding:5px 10px;font-size:13px;width:240px">
+    <select id="gcFilterStatus" onchange="window.renderGiftCodesAdmin()" style="padding:5px 10px;font-size:13px">
+      <option value="all">Tất cả trạng thái</option>
+      <option value="available">Còn hiệu lực (chưa dùng)</option>
+      <option value="used">Đã sử dụng hết</option>
+      <option value="disabled">Đã tắt</option>
+    </select>
+    <span id="gcTotalInfo" style="font-size:13px;color:#c084fc;margin-left:auto">Đang tải danh sách mã...</span>
+  </div>
+
+  <div style="max-height:280px;overflow-y:auto;border:1px solid #3b1e52;border-radius:6px">
+    <table>
+      <thead>
+        <tr>
+          <th style="text-align:left">Mã GiftCode</th>
+          <th style="text-align:left">Phần thưởng</th>
+          <th style="text-align:center;width:100px">Lượt dùng</th>
+          <th style="text-align:left">Người đã nhận</th>
+          <th style="text-align:center;width:110px">Trạng thái</th>
+          <th style="text-align:center;width:130px">Thao tác</th>
+        </tr>
+      </thead>
+      <tbody id="giftCodesTableBody"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- BẢNG XẾP HẠNG & CẬP NHẬT HẠNG SERVER -->
+<section class="card" style="border:1.5px solid #eab308;background:#141b12;margin-bottom:20px" id="adminRankingSection">
+  <div class="card-header" style="border-color:#3a4a20;padding-bottom:12px">
+    <div style="display:flex;align-items:center;gap:12px">
+      <span style="font-size:26px">🏆</span>
+      <div>
+        <h2 style="font-size:18px;color:#facc15">Bảng Xếp Hạng & Cập Nhật Hạng (BXH Server)</h2>
+        <div style="font-size:13px;color:#cbd5e1;margin-top:2px">Quản lý thứ hạng cao thủ server · Xem Top cấp độ, tiến độ ải và tài phú</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <button id="btnResetProgressRank" type="button" onclick="window.resetAllCharactersProgress()" class="btn-sub" style="padding:8px 14px;font-size:13px;background:#78350f;border:1px solid #d97706;color:#fde68a;font-weight:bold;display:inline-flex;align-items:center;gap:6px">
+        ⚡ Reset Tất Cả (Lv 1 · 0 Vạn · Ải 1)
+      </button>
+      <button id="btnRefreshRanking" type="button" onclick="window.refreshRankingAdmin()" class="btn-gold" style="padding:8px 16px;font-size:13px;display:inline-flex;align-items:center;gap:6px">
+        🔄 Cập Nhật Hạng
+      </button>
+    </div>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+    <div style="display:inline-flex;gap:6px">
+      <button type="button" class="quick-btn" id="rankTabLvl" onclick="window.setRankSort('lvl')" style="background:#284c3a;color:#ffd24a;border-color:#ffd24a">Top Cấp Độ</button>
+      <button type="button" class="quick-btn" id="rankTabStage" onclick="window.setRankSort('stage')">Top Tiến Độ Ải</button>
+      <button type="button" class="quick-btn" id="rankTabGold" onclick="window.setRankSort('gold')">Top Tài Phú</button>
+    </div>
+    <select id="rankFacFilter" onchange="window.renderRankingAdmin()" style="font-size:13px;padding:5px 10px">
+      <option value="all">Tất cả môn phái</option>
+      <option value="shaolin">Thiếu Lâm</option>
+      <option value="tianwang">Thiên Vương</option>
+      <option value="tangmen">Đường Môn</option>
+      <option value="wudu">Ngũ Độc</option>
+      <option value="emei">Nga Mi</option>
+      <option value="cuiyan">Thúy Yên</option>
+      <option value="gaibang">Cái Bang</option>
+      <option value="tianren">Thiên Nhẫn</option>
+      <option value="wudang">Võ Đang</option>
+      <option value="kunlun">Côn Lôn</option>
+    </select>
+    <input id="rankSearchInput" type="text" oninput="window.renderRankingAdmin()" placeholder="🔍 Tìm tên nhân vật..." style="padding:5px 10px;font-size:13px;width:180px">
+    <span id="rankCountInfo" style="font-size:13px;color:#8bb098;margin-left:auto">Đang tải BXH...</span>
+  </div>
+
+  <div style="max-height:300px;overflow-y:auto;border:1px solid #2d4533;border-radius:6px">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:75px;text-align:center">Hạng</th>
+          <th style="text-align:left">Nhân vật</th>
+          <th style="text-align:left">Môn phái</th>
+          <th style="text-align:center">Cấp độ</th>
+          <th style="text-align:center">Ải / Tầng</th>
+          <th style="text-align:right">Tài phú (Vàng)</th>
+          <th style="text-align:left">Tài khoản</th>
+          <th style="text-align:center;width:100px">Thao tác</th>
+        </tr>
+      </thead>
+      <tbody id="rankingTableBody"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 3. Khu vực Quản lý người chơi & Phát Cấp, Tiền Vạn, KNB -->
+<section class="card" id="playerManageSection" style="border-color:#ffd24a">
+  <div class="card-header">
+    <div>
+      <h2 style="font-size:18px">👤 Quản Lý & Phát Thưởng: Tiền Vạn · KNB · Level</h2>
+      <div style="font-size:13px;color:#8bb098;margin-top:2px">Chọn phát cho tài khoản được chọn hoặc phát toàn server</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <span id="userStatusTag" style="font-size:13px;color:#ffd24a;font-weight:bold">Chưa chọn người chơi</span>
+      <button id="btnLockSelectedUser" type="button" style="display:none;padding:5px 12px;font-size:12px;border-radius:4px;cursor:pointer;font-weight:bold" onclick="window.toggleLockSelectedUser()"></button>
+    </div>
+  </div>
+  <input id="uid" type="hidden">
+
+  <!-- Lựa chọn đối tượng & Phương thức -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));gap:14px;margin-bottom:14px">
+    <!-- Cột đối tượng -->
+    <div style="background:#0a1410;border:1px solid #233e31;border-radius:8px;padding:12px">
+      <div style="font-weight:bold;color:#ffd24a;margin-bottom:8px;font-size:13px">🎯 Đối tượng nhận:</div>
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;margin-bottom:6px">
+        <input type="radio" name="grantTarget" id="grantTargetUser" value="selected" checked>
+        <span>Tài khoản đang chọn: <b id="grantTargetName" style="color:#44e37a">(Chưa chọn)</b></span>
+      </label>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+        <span style="font-size:13px;color:#8bb098">Slot nhân vật:</span>
+        <div id="slotPicker" style="display:inline-flex;gap:6px"></div>
+        <input id="slot" type="hidden" value="1">
+      </div>
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;margin-top:10px">
+        <input type="radio" name="grantTarget" id="grantTargetAll" value="all">
+        <span style="color:#ffd24a;font-weight:bold">🌐 TẤT CẢ NGƯỜI CHƠI (TOÀN SERVER)</span>
+      </label>
+    </div>
+
+    <!-- Cột phương thức -->
+    <div style="background:#0a1410;border:1px solid #233e31;border-radius:8px;padding:12px">
+      <div style="font-weight:bold;color:#ffd24a;margin-bottom:8px;font-size:13px">📦 Phương thức nhận:</div>
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;margin-bottom:8px">
+        <input type="radio" name="grantMethod" id="grantMethodDirect" value="direct" checked>
+        <span>⚡ <b>Cộng thẳng vào nhân vật ngay lập tức</b></span>
+      </label>
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+        <input type="radio" name="grantMethod" id="grantMethodMail" value="mail">
+        <span>✉ <b>Gửi qua Hòm Thư ingame</b> <small style="color:#8bb098">(Vào bấm "Nhận thư")</small></span>
+      </label>
+      <div id="grantMailOptions" style="display:none;margin-top:8px;display:flex;flex-direction:column;gap:6px">
+        <input id="grantMailSubject" type="text" placeholder="Tiêu đề thư" value="Phát thưởng từ Quản Trị Viên" style="font-size:13px">
+        <input id="grantMailText" type="text" placeholder="Nội dung thư" value="Phần thưởng dành cho bạn. Chúc bạn chơi game vui vẻ!" style="font-size:13px">
+      </div>
+    </div>
+  </div>
+
+  <!-- Form nhập Level, Tiền Vạn, KNB -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:14px;margin-bottom:16px">
+    <!-- 1. Cấp độ (Level) -->
+    <div style="background:#0f1c16;border:1px solid #233e31;border-radius:8px;padding:12px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+        <span style="font-weight:bold;color:#ffd24a;font-size:14px">⭐ Cấp Độ (Level 1–180):</span>
+        <b id="charLevelCurrent" style="color:#8bb098;font-size:13px">Hiện tại: --</b>
+      </div>
+      <input id="levelInput" type="number" min="1" max="180" placeholder="Nhập cấp độ muốn đặt (1–180)..." style="width:100%;font-size:15px;font-weight:bold;color:#ffd24a">
+      <div style="display:flex;gap:5px;margin-top:8px;flex-wrap:wrap">
+        <button type="button" class="quick-btn" onclick="window.quickSetLevel(90)">Cấp 90 (Bí Kíp)</button>
+        <button type="button" class="quick-btn" onclick="window.quickSetLevel(120)">Cấp 120</button>
+        <button type="button" class="quick-btn" onclick="window.quickSetLevel(150)">Cấp 150</button>
+        <button type="button" class="quick-btn" onclick="window.quickSetLevel(180)">Cấp 180 (Trần)</button>
+        <button type="button" class="quick-btn" onclick="window.quickAddLevel(10)">+10 Cấp</button>
+      </div>
+    </div>
+
+    <!-- 2. Tiền Vạn (Ngân Lượng) -->
+    <div style="background:#0f1c16;border:1px solid #233e31;border-radius:8px;padding:12px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+        <span style="font-weight:bold;color:#ffd24a;font-size:14px">💰 Phát Tiền Vạn (Ngân lượng):</span>
+        <b id="grantVanPreview" style="color:#44e37a;font-size:13px">0 vạn = 0 lượng</b>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <input id="grantVanInput" type="number" min="0" value="0" placeholder="Số vạn..." oninput="window.updateVanPreview()" style="flex:1;font-size:15px;font-weight:bold;color:#ffd24a">
+        <span style="color:#8bb098;font-size:13px">vạn</span>
+      </div>
+      <div style="display:flex;gap:5px;margin-top:8px;flex-wrap:wrap">
+        <button type="button" class="quick-btn" onclick="window.quickAddVan(50)">+50 vạn</button>
+        <button type="button" class="quick-btn" onclick="window.quickAddVan(100)">+100 vạn</button>
+        <button type="button" class="quick-btn" onclick="window.quickAddVan(500)">+500 vạn</button>
+        <button type="button" class="quick-btn" onclick="window.quickAddVan(1000)">+1.000 vạn</button>
+        <button type="button" class="quick-btn" onclick="window.quickAddVan(5000)">+5.000 vạn</button>
+        <button type="button" class="quick-btn" onclick="window.quickZeroVan()" style="color:#ff8888">Xóa</button>
+      </div>
+    </div>
+
+    <!-- 3. Kim Nguyên Bảo (KNB) -->
+    <div style="background:#0f1c16;border:1px solid #233e31;border-radius:8px;padding:12px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+        <span style="font-weight:bold;color:#ffd24a;font-size:14px">🪙 Kim Nguyên Bảo (KNB):</span>
+        <b id="grantKnbPreview" style="color:#44e37a;font-size:13px">0 KNB</b>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <input id="grantKnbInput" type="number" min="0" value="0" placeholder="Số KNB..." oninput="window.updateKnbPreview()" style="flex:1;font-size:15px;font-weight:bold;color:#ffd24a">
+        <span style="color:#8bb098;font-size:13px">KNB</span>
+      </div>
+      <div style="display:flex;gap:5px;margin-top:8px;flex-wrap:wrap">
+        <button type="button" class="quick-btn" onclick="window.quickAddKnb(20)">+20 KNB</button>
+        <button type="button" class="quick-btn" onclick="window.quickAddKnb(50)">+50 KNB</button>
+        <button type="button" class="quick-btn" onclick="window.quickAddKnb(100)">+100 KNB</button>
+        <button type="button" class="quick-btn" onclick="window.quickAddKnb(200)">+200 KNB</button>
+        <button type="button" class="quick-btn" onclick="window.quickAddKnb(500)">+500 KNB</button>
+        <button type="button" class="quick-btn" onclick="window.quickZeroKnb()" style="color:#ff8888">Xóa</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Nút thực hiện phát Tiền, KNB, Level -->
+  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;background:#09140f;border:1px solid #233e31;border-radius:8px;padding:12px 16px">
+    <div id="grantBasicStatus" style="font-size:13px;color:#8bb098">Sẵn sàng phát Level, Tiền Vạn hoặc KNB...</div>
+    <button type="button" id="btnExecuteBasicGrant" onclick="window.executeBasicGrant()" class="btn-primary" style="padding:10px 24px;font-size:15px">
+      🚀 PHÁT LEVEL · TIỀN VẠN · KNB NGAY
+    </button>
+  </div>
+</section>
+
+<!-- 4. KHUNG TẠO VẬT PHẨM THEO Ý ĐỂ PHÁT CHO NGƯỜI CHƠI (IMAGE 1) -->
+<section class="card" id="customItemSection" style="border:2px solid #2e8b57">
+  <div class="card-header">
+    <div>
+      <h2 style="font-size:18px;color:#44e37a">⚒ Tạo Vật Phẩm Theo Ý Để Phát Cho Người Chơi</h2>
+      <div style="font-size:13px;color:#a8c7b0;margin-top:2px">
+        Chọn mẫu trang bị và các dòng ma thuật muốn có. Mỗi dòng mặc định giá trị cao nhất trong bậc; bạn có thể chỉnh từng giá trị. Món mới được khóa để tránh tự bán.
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Tạo vật phẩm chuẩn giao diện Image 1 -->
+  <div class="admin-item-fields">
+    <label class="admin-item-field">
+      <span>Loại trang bị</span>
+      <select id="customItemDetail"></select>
+    </label>
+    <label class="admin-item-field">
+      <span>Mẫu</span>
+      <select id="customItemPart"></select>
+    </label>
+  </div>
+
+  <div class="admin-item-meta">
+    <label class="admin-item-field">
+      <span>Bậc đồ</span>
+      <input id="customItemTier" type="number" min="1" max="10" step="1" value="6">
+    </label>
+    <label class="admin-item-field">
+      <span>Hệ</span>
+      <select id="customItemSeries"></select>
+    </label>
+    <label class="admin-item-field">
+      <span>Cường hóa</span>
+      <input id="customItemEnh" type="number" min="0" max="10" step="1" value="0">
+    </label>
+  </div>
+
+  <label class="admin-item-field" style="margin-bottom:12px">
+    <span>Tên tùy chỉnh</span>
+    <input id="customItemName" type="text" maxlength="60" placeholder="Để trống để dùng tên mẫu">
+  </label>
+
+  <b class="admin-item-section-title">Thuộc tính ma thuật</b>
+  <div class="admin-item-affixes" id="customItemAffixes">
+    <!-- 6 dòng ma thuật được render linh hoạt bằng JavaScript -->
+  </div>
+
+  <!-- Khung xem trước trực quan chuẩn game -->
+  <div class="admin-item-preview" id="customItemPreview">
+    <span style="color:#678;font-size:13px">Đang tải xem trước vật phẩm...</span>
+  </div>
+
+  <!-- Nút tạo & phát vật phẩm -->
+  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-top:16px">
+    <div id="customItemStatus" style="font-size:13px;color:#8bb098">Vật phẩm sẽ được phát tới đối tượng đã chọn ở mục trên.</div>
+    <button type="button" id="btnCreateCustomItem" onclick="window.createAndGrantCustomItem()" class="btn-gold" style="padding:12px 28px;font-size:15px">
+      🎁 TẠO & PHÁT CHO NGƯỜI CHƠI NGAY
+    </button>
+  </div>
+</section>
+
+<!-- 5. QUẢN LÝ KỲ TRÂN CÁC (HÀNG HÓA & GIÁ BÁN) -->
+<section class="card" style="border:1.5px solid #eab308;background:#181609;margin-bottom:20px" id="adminKtcSection">
+  <div class="card-header" style="border-color:#5c470a;padding-bottom:12px">
+    <div style="display:flex;align-items:center;gap:12px">
+      <span style="font-size:26px">🏮</span>
+      <div>
+        <h2 style="font-size:18px;color:#facc15">Quản Lý Kỳ Trân Các (Hàng Hóa & Giá Bán)</h2>
+        <div style="font-size:13px;color:#fef08a;margin-top:2px">
+          Tự do thay đổi các mặt hàng bán trên Kỳ Trân Các, điều chỉnh giá Kim Nguyên Bảo (KNB) hoặc Tiền Vạn (lượng).
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <button id="btnReloadKtcCatalog" type="button" onclick="window.loadKtcCatalogAdmin()" class="btn-sub" style="padding:6px 14px;font-size:13px">
+        🔄 Làm mới
+      </button>
+      <button id="btnSaveKtcCatalog" type="button" onclick="window.saveKtcCatalogAdmin()" class="btn-gold" style="padding:6px 16px;font-size:13px;font-weight:bold">
+        💾 LƯU THIẾT LẬP KỲ TRÂN CÁC
+      </button>
+    </div>
+  </div>
+
+  <div style="margin-bottom:10px;font-size:13px;color:#8bb098">
+    Bấm trực tiếp vào các ô giá hoặc chọn loại tiền tệ để chỉnh sửa. Sau khi chỉnh sửa xong, bấm nút <b>"LƯU THIẾT LẬP KỲ TRÂN CÁC"</b> ở góc trên.
+  </div>
+
+  <div style="max-height:360px;overflow-y:auto;border:1px solid #423508;border-radius:6px;margin-bottom:14px">
+    <table style="width:100%;font-size:13px">
+      <thead>
+        <tr>
+          <th style="width:50px;text-align:center">Icon</th>
+          <th style="text-align:left">Tên vật phẩm</th>
+          <th style="width:80px;text-align:center">Mã Key</th>
+          <th style="width:140px;text-align:center">Loại tiền</th>
+          <th style="width:120px;text-align:center">Giá bán</th>
+          <th style="text-align:left">Công dụng / Mô tả</th>
+          <th style="width:75px;text-align:center">Bật bán</th>
+          <th style="width:65px;text-align:center">Xóa</th>
+        </tr>
+      </thead>
+      <tbody id="ktcCatalogTableBody"></tbody>
+    </table>
+  </div>
+
+  <!-- Thêm mặt hàng mới -->
+  <div style="background:#221e0a;border:1px solid #4a3e0f;border-radius:8px;padding:12px 16px">
+    <div style="font-weight:bold;color:#facc15;font-size:13.5px;margin-bottom:10px">➕ Thêm Mặt Hàng Mới Vào Kỳ Trân Các:</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));gap:10px;margin-bottom:10px">
+      <input id="newKtcName" type="text" placeholder="Tên vật phẩm (VD: Lệnh Bài)" style="font-size:12.5px">
+      <input id="newKtcKey" type="text" placeholder="Mã key (VD: lenhbai)" style="font-size:12.5px">
+      <select id="newKtcPriceType" style="font-size:12.5px">
+        <option value="knb">Kim Nguyên Bảo (KNB)</option>
+        <option value="gold">Tiền Vạn (Lượng)</option>
+      </select>
+      <input id="newKtcPrice" type="number" min="0" placeholder="Giá bán" value="10" style="font-size:12.5px">
+      <input id="newKtcIcon" type="text" placeholder="Icon (VD: img/ep/tt.png)" value="img/ep/tt.png" style="font-size:12.5px">
+    </div>
+    <div style="display:flex;gap:10px">
+      <input id="newKtcDesc" type="text" placeholder="Mô tả công dụng vật phẩm..." style="flex:1;font-size:12.5px">
+      <button type="button" onclick="window.addKtcItemAdmin()" class="btn-primary" style="padding:8px 18px;font-size:13px;white-space:nowrap">
+        + Thêm Món
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- 6. PHÁT NHANH TRANG BỊ CÔNG THÀNH CHIẾN (AN BANG & ĐỊNH QUỐC) -->
+<section class="card" style="border:1px solid #ffd24a">
+  <div class="card-header">
+    <div>
+      <h2 style="font-size:17px;color:#ffd24a">🌟 Phát Nhanh Trang Bị Chuẩn Công Thành Chiến</h2>
+      <div style="font-size:13px;color:#a8c7b0;margin-top:2px">
+        Phiên bản Công Thành Chiến đồ cao nhất trong game là <b>An Bang</b> và <b>Định Quốc</b>. Bấm 1 click để phát nhanh:
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+    <button type="button" onclick="window.quickGrantSet('anbang')" class="btn-gold" style="padding:9px 18px">
+      🌟 Phát Trọn Bộ An Bang (4 món)
+    </button>
+    <button type="button" onclick="window.quickGrantSet('dinhquoc')" class="btn-gold" style="padding:9px 18px">
+      🛡 Phát Trọn Bộ Định Quốc (5 món)
+    </button>
+    <button type="button" onclick="window.quickGrantSet('combo_pots')" class="btn-sub" style="padding:9px 16px">
+      🧪 Combo Thuốc (Máu + Mana T5)
+    </button>
+    <button type="button" onclick="window.quickGrantSet('bk90')" class="btn-sub" style="padding:9px 16px">
+      📖 Mật Tịch 90 (10 cuốn)
+    </button>
+  </div>
+
+  <div style="font-size:13px;color:#ffd24a;font-weight:bold;margin-bottom:8px">🐎 Phát Thần Mã Công Thành Chiến:</div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <button type="button" class="quick-btn" onclick="window.quickGrantHorse('Chiếu Dạ Ngọc Sư Tử')">Chiếu Dạ Ngọc Sư Tử</button>
+    <button type="button" class="quick-btn" onclick="window.quickGrantHorse('Xích Thố')">Xích Thố</button>
+    <button type="button" class="quick-btn" onclick="window.quickGrantHorse('Đích Lô')">Đích Lô</button>
+    <button type="button" class="quick-btn" onclick="window.quickGrantHorse('Tuyệt ảnh')">Tuyệt Ảnh</button>
+    <button type="button" class="quick-btn" onclick="window.quickGrantHorse('Ô Vân Đạp Tuyết')">Ô Vân Đạp Tuyết</button>
+    <button type="button" class="quick-btn" onclick="window.quickGrantHorse('Bôn Tiêu')">Bôn Tiêu</button>
+    <button type="button" class="quick-btn" onclick="window.quickGrantHorse('Phi Vân')">Phi Vân</button>
+    <button type="button" class="quick-btn" onclick="window.quickGrantHorse('Phiên Vũ')">Phiên Vũ</button>
+  </div>
+</section>
+
+<link rel="stylesheet" href="account-box.css?v=2">
+<script src="account-box.js?v=3" data-mode="admin" data-server="xanh"></script>
+<script src="data.js?v=ctc-v3"></script>
+<script src="js/server-admin.js?v=ctc-v5"></script>
+</body>
+</html>
