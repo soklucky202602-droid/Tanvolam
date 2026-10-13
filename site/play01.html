@@ -23,6 +23,7 @@
 <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill.P2Xu9kJm.js">
 <link rel="stylesheet" crossorigin href="/assets/game.DI5dJOGr.css">
 <link rel="stylesheet" href="online.css?v=20261010-gift-v1">
+<script src="/js/api-config.js?v=20261013-api-v1"></script>
 </head>
 <body>
 <div id="app">
@@ -178,54 +179,18 @@
 <script src="/js/server-open-guard.js?v=20261010-v1"></script>
 <script src="/js/giftcode-modal.js?v=20261010-v1"></script>
 <script type="module">
-  // Wait until user authentication & cloud character restore are complete before loading game
-  try {
+(async()=>{
+  try{
     await window.jxAuthReady;
-    await import('/assets/game.zBuLCNB4.js?v=20261010-ctc-v22');
-
-    // Click KNB opens Kỳ Trân Các
-    const knbRow = document.getElementById('topKnbRow');
-    if (knbRow) {
-      knbRow.onclick = (e) => {
-        e.stopPropagation();
-        if (typeof window.openKyTranCac === 'function') window.openKyTranCac();
-      };
-    }
-
-    // Auto-sync KNB on header
-    setInterval(() => {
-      const p = window.P || (typeof window.getP === 'function' ? window.getP() : null);
-      if (p) {
-        const knbEl = document.getElementById('knbVal');
-        if (knbEl) {
-          const v = Math.floor(Number(p.knb) || 0);
-          const str = v >= 1e6 ? (v / 1e6).toFixed(1).replace(/\.0$/, '') + 'M' : v >= 1e3 ? (v / 1e3).toFixed(1).replace(/\.0$/, '') + 'k' : String(v);
-          if (knbEl.textContent !== str) knbEl.textContent = str;
-        }
-      }
-    }, 400);
-
-    const handleAfkClick = (e) => {
-      const btn = e.target.closest('#tabAfkBtn, button[data-t="more"]');
-      if (btn) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        if (typeof window.setAfkMode === 'function') {
-          window.setAfkMode(true);
-        } else if (typeof window.jxAfk === 'function') {
-          window.jxAfk(true);
-        }
-      }
-    };
-    document.addEventListener('click', handleAfkClick, true);
-    document.addEventListener('pointerdown', (e) => {
-      if (e.target.closest('#tabAfkBtn, button[data-t="more"]')) {
-        e.stopPropagation();
-      }
-    }, true);
-  } catch (err) {
-    console.error('Lỗi nạp game:', err);
+    const m=await import('/assets/game.zBuLCNB4.js?v=20261010-v11');
+    if(m&&typeof m.boot==='function')m.boot();
+    else if(m&&typeof m.default==='function')m.default();
+  }catch(e){
+    console.error(e);
+    const el=document.querySelector('#toast');
+    if(el)el.textContent='Không thể khởi động trò chơi. Vui lòng tải lại trang.';
   }
+})();
 </script>
 </body>
 </html>
