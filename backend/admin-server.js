@@ -3,6 +3,7 @@
 require('./cors-preload.js');
 require('./admin-more.js');
 require('./admin-fix.js');
+require('./inventory-fix.js');
 const http=require('http'),fs=require('fs'),path=require('path');
 const original=http.createServer,ORIGIN='https://tanvolam.onrender.com';
 const DATA=path.join(process.env.DATA_DIR||path.join(__dirname,'data'),'database.json');
