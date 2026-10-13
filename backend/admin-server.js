@@ -6,6 +6,9 @@ require('./admin-fix.js');
 require('./admin-v2.js');
 require('./admin-admv.js');
 require('./inventory-fix.js');
+// IMPORTANT: this compatibility route must be loaded AFTER admin-v2 so it sits outside
+// the generic /api/admin/* 404 handler and can answer /api/admin/admv/settings.
+require('./admv-compat.js');
 const http=require('http'),fs=require('fs'),path=require('path');
 const original=http.createServer,ORIGIN='https://tanvolam.onrender.com';
 const DATA=path.join(process.env.DATA_DIR||path.join(__dirname,'data'),'database.json');
