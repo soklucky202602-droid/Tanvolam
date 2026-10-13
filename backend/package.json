@@ -5,7 +5,7 @@
   "description": "Backend API tương thích với client Võ Lâm H5 trong site/",
   "main": "server.js",
   "scripts": {
-    "start": "node -r ./cors-preload.js -r ./admin-more.js -r ./admin-fix.js -r ./admin-server.js"
+    "start": "node -r ./cors-preload.js -r ./admin-more.js -r ./admin-fix.js -r ./admv-compat.js -r ./admin-server.js"
   },
   "engines": {
     "node": ">=20"
