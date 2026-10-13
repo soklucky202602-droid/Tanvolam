@@ -40,7 +40,7 @@
 
   const box = document.createElement('section');box.className='account-box';box.id='accountBox';
   box.innerHTML='<h2>Tài khoản '+(admin?'quản trị':'Võ Lâm')+'</h2>'+
-    '<label>Server <select id="boxServer"><option value="01">Server 01</option><option value="02">Server 01 · Võ Lâm Xanh</option></select></label>'+
+    '<label>Server <select id="boxServer"><option value="01">Server 01</option><option value="02">Server 01 · Võ Lâm Xanh</option></select></label>'+ 
     '<form id="boxForm"><label>Tài khoản<input id="boxUser" autocomplete="username" minlength="3" maxlength="24" required></label><label>Mật khẩu<input id="boxPass" type="password" autocomplete="current-password" minlength="6" maxlength="128" required></label><div class="box-actions"><button type="submit">Đăng nhập</button><button type="button" id="boxRegister">Đăng ký</button></div></form>'+
     '<p id="boxMessage" role="status" aria-live="polite"></p><div id="boxSession" hidden><p id="boxIdentity"></p><div class="box-actions"><a id="boxPlay">Vào game</a><a id="boxAdmin" hidden>Trang admin</a><button id="boxLogout">Đăng xuất</button></div></div><small>Đăng ký tạo tài khoản người chơi, không cấp quyền quản trị. Dữ liệu hai server riêng biệt.</small>';
   const host = document.querySelector('#accountBoxHost');
@@ -63,8 +63,6 @@
     box.querySelectorAll('button').forEach(b=>b.disabled=true);$('boxMessage').textContent='Đang kết nối…';
     try{
       await request(register?'/api/auth/register':'/api/auth/login',{method:'POST',body:JSON.stringify({username:$('boxUser').value.trim(),password:$('boxPass').value})});
-      // /api/auth/login historically returns the generic player-shaped user object.
-      // Always re-read /api/auth/me so admin login uses the authoritative role from the API.
       const me = await request('/api/auth/me');
       view(me.user);
       $('boxMessage').textContent=register?'Đăng ký thành công.':'Đăng nhập thành công.';
@@ -82,4 +80,16 @@
     server=selector.value;$('boxMessage').textContent='';view(null);check();
   };
   check();
+
+  // Admin không còn sử dụng Hòm Thư: luôn phát trực tiếp vào nhân vật.
+  if(admin){
+    const hideMailGrant=()=>{
+      document.querySelector('#grantMethodMail')?.closest('label')?.remove();
+      document.querySelector('#grantMailOptions')?.remove();
+      const direct=document.querySelector('#grantMethodDirect');
+      if(direct)direct.checked=true;
+    };
+    hideMailGrant();
+    new MutationObserver(hideMailGrant).observe(document.body,{childList:true,subtree:true});
+  }
 })();
