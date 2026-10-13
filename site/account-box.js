@@ -2,7 +2,7 @@
 (() => {
   const script = document.currentScript, admin = script.dataset.mode === 'admin';
   const mounted = location.pathname.startsWith('/play02/');
-  const standalone = true; // Standalone distribution of Server 02.
+  const standalone = true;
   const blue = mounted || standalone || script.dataset.server === 'xanh';
   const fixed = admin || blue;
   let server = blue ? '02' : '01', busy = false, checkVersion = 0;
@@ -10,8 +10,6 @@
   const root = () => mounted ? '/play02' : (!fixed && server === '02' ? '/play02' : '');
   const play = () => mounted ? '/play02/' : (fixed ? '/play01' : '/play'+server);
 
-  // admin.html does not load api-config.js, so route its /api requests directly
-  // to the Render API before server-admin.js starts making requests.
   if (admin && !window.__jxAdminFetchPatched) {
     const nativeFetch = window.fetch.bind(window);
     const toApiUrl = input => {
@@ -48,7 +46,7 @@
   const host = document.querySelector('#accountBoxHost');
   if(host)host.append(box);else document.body.prepend(box);
   const $=id=>box.querySelector('#'+id), selector=$('boxServer');selector.value=server;
-  selector.disabled=true; // This package contains only Server 02.
+  selector.disabled=true;
   const lock=on=>{if(admin)document.body.classList.toggle('admin-locked',on);};if(admin)lock(true);
   async function request(path,options={}) {
     const r=await fetch(root()+path,{...options,headers:{'content-type':'application/json',...options.headers}});
@@ -63,9 +61,15 @@
   async function submit(register){
     if(busy||!$('boxForm').reportValidity())return;++checkVersion;busy=true;selector.disabled=true;
     box.querySelectorAll('button').forEach(b=>b.disabled=true);$('boxMessage').textContent='Đang kết nối…';
-    try{const r=await request(register?'/api/auth/register':'/api/auth/login',{method:'POST',body:JSON.stringify({username:$('boxUser').value.trim(),password:$('boxPass').value})});view(r.user);$('boxMessage').textContent=register?'Đăng ký thành công.':'Đăng nhập thành công.';
-      if(admin&&r.user.role==='admin')location.reload();
-      else if(admin)$('boxMessage').textContent='Đây là tài khoản người chơi, không có quyền quản trị.';
+    try{
+      await request(register?'/api/auth/register':'/api/auth/login',{method:'POST',body:JSON.stringify({username:$('boxUser').value.trim(),password:$('boxPass').value})});
+      // /api/auth/login historically returns the generic player-shaped user object.
+      // Always re-read /api/auth/me so admin login uses the authoritative role from the API.
+      const me = await request('/api/auth/me');
+      view(me.user);
+      $('boxMessage').textContent=register?'Đăng ký thành công.':'Đăng nhập thành công.';
+      if(admin && me.user?.role==='admin') location.reload();
+      else if(admin) $('boxMessage').textContent='Đây là tài khoản người chơi, không có quyền quản trị.';
     }catch(e){$('boxMessage').textContent=e.message;}finally{busy=false;selector.disabled=true;box.querySelectorAll('button').forEach(b=>b.disabled=false);}
   }
   $('boxForm').onsubmit=e=>{e.preventDefault();submit(false);};$('boxRegister').onclick=()=>submit(true);
@@ -73,7 +77,6 @@
   selector.onchange=()=>{
     if(admin){
       ++checkVersion;lock(true);selector.disabled=true;
-      const destination=selector.value==='02'?'/play02/admin.html':'/admin.html';
       location.assign(root()+'/admin.html');return;
     }
     server=selector.value;$('boxMessage').textContent='';view(null);check();
