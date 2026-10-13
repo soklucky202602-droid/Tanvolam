@@ -38,15 +38,32 @@
       }
     }
   }
+  function persistSlot(){
+    const keys=['jxidle','jxidle_2','jxidle_3'];
+    const k=keys[slotIndex]||keys[0];
+    if(typeof window.jxPack==='function') localStorage.setItem(k,window.jxPack(slot()));
+    else localStorage.setItem(k,JSON.stringify(slot()));
+    localStorage.setItem('jxidle_slot',String(slotIndex));
+  }
   async function claim(i){
     const ms=mails(), m=ms[i]; if(!m||m.claimed)return;
-    const sl=slot(); addItems(sl,m.items); ms.splice(i,1); sl.mail=ms;
+    const sl=slot();
+    const backup=JSON.parse(JSON.stringify(sl));
+    addItems(sl,m.items);
+    ms.splice(i,1); sl.mail=ms;
     try{
-      const r=await fetch(API,{method:'PUT',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({game:state})});
-      if(!r.ok)throw new Error('save');
+      persistSlot();
+      if(typeof window.jxSync!=='function') throw new Error('sync');
+      await window.jxSync();
       render();
       if(typeof window.renderAll==='function')window.renderAll();
-    }catch(e){ alert('Không thể nhận thư, vui lòng thử lại.'); }
+      if(typeof window.toast==='function') window.toast('Đã nhận quà từ thư.');
+    }catch(e){
+      state.slots[slotIndex]=backup;
+      try{persistSlot();}catch(_){ }
+      if(e&&e.status===409){ alert('Dữ liệu vừa thay đổi, game sẽ tải lại. Vui lòng mở lại Hòm thư sau khi vào game.'); }
+      else alert('Không thể nhận thư, vui lòng thử lại.');
+    }
   }
   async function open(){
     try{await load(); if(!overlay){overlay=document.createElement('div');overlay.id='mailboxOverlay';document.body.appendChild(overlay);} overlay.hidden=false; render();}
