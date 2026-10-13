@@ -22,6 +22,7 @@
     overlay.querySelectorAll('.mail-claim').forEach(b=>b.onclick=()=>claim(Number(b.dataset.i)));
   }
   function addItems(sl,items){
+    sl.inv=Array.isArray(sl.inv)?sl.inv:[];
     sl.stackItems=sl.stackItems&&typeof sl.stackItems==='object'?sl.stackItems:{};
     sl.adminItems=Array.isArray(sl.adminItems)?sl.adminItems:[];
     sl.bag=Array.isArray(sl.bag)?sl.bag:[];
@@ -34,9 +35,26 @@
       for(let n=0;n<qty;n++){
         const item={...raw}; delete item.qty; delete item.quantity;
         item.uid=item.uid||('mail-'+Date.now()+'-'+Math.random().toString(36).slice(2));
+        sl.inv.push(item);
         sl.adminItems.push(item); sl.bag.push(item);
       }
     }
+  }
+  function repairInventory(sl){
+    sl.inv=Array.isArray(sl.inv)?sl.inv:[];
+    const seen=new Set(sl.inv.map(x=>x&&x.uid).filter(Boolean));
+    let changed=false;
+    for(const src of [sl.adminItems,sl.bag]){
+      if(!Array.isArray(src))continue;
+      for(const item of src){
+        if(!item||typeof item!=='object')continue;
+        const uid=item.uid;
+        if(uid&&seen.has(uid))continue;
+        if(uid)seen.add(uid);
+        sl.inv.push(item); changed=true;
+      }
+    }
+    return changed;
   }
   function persistSlot(){
     const keys=['jxidle','jxidle_2','jxidle_3'];
@@ -66,7 +84,15 @@
     }
   }
   async function open(){
-    try{await load(); if(!overlay){overlay=document.createElement('div');overlay.id='mailboxOverlay';document.body.appendChild(overlay);} overlay.hidden=false; render();}
+    try{
+      await load();
+      const repaired=repairInventory(slot());
+      if(repaired){
+        persistSlot();
+        if(typeof window.jxSync==='function') await window.jxSync();
+      }
+      if(!overlay){overlay=document.createElement('div');overlay.id='mailboxOverlay';document.body.appendChild(overlay);} overlay.hidden=false; render();
+    }
     catch(e){alert('Không thể tải hòm thư.');}
   }
   function close(){if(overlay)overlay.hidden=true;}
