@@ -1,0 +1,17 @@
+'use strict';
+const http=require('http'),fs=require('fs'),path=require('path');
+const previous=http.createServer;
+const ORIGIN='https://tanvolam.onrender.com';
+const DATA=path.join(process.env.DATA_DIR||path.join(__dirname,'data'),'database.json');
+const CFG=path.join(process.env.DATA_DIR||path.join(__dirname,'data'),'admv-config.json');
+const DEFAULT={xp:1,gold:1,drop:1,hp:1,dmg:1,heroDmg:1,spawn:1,lucky:0,speed:0,god:false,infMana:false,maintenance:false,announce:''};
+const read=(p,f)=>{try{return JSON.parse(fs.readFileSync(p,'utf8'))}catch(_){return f}};
+const write=(p,v)=>{fs.mkdirSync(path.dirname(p),{recursive:true});fs.writeFileSync(p,JSON.stringify(v,null,2))};
+const db=()=>read(DATA,{users:[],sessions:[]});
+const cookie=r=>{const x=String(r.headers.cookie||'').split(';').map(v=>v.trim()).find(v=>v.startsWith('jx_session='));return x?decodeURIComponent(x.slice(11)):''};
+const current=(r,d)=>{const sid=cookie(r),s=(d.sessions||[]).find(x=>x.id===sid&&Number(x.expiresAt)>Date.now());return s?(d.users||[]).find(x=>x.id===s.userId):null};
+const isAdmin=u=>{const a=new Set(String(process.env.ADMIN_USERNAMES||'admin1234').split(',').map(x=>x.trim().toLowerCase()).filter(Boolean));return !!u&&a.has(String(u.username||'').toLowerCase())};
+const cors=s=>{s.setHeader('Access-Control-Allow-Origin',ORIGIN);s.setHeader('Access-Control-Allow-Credentials','true');s.setHeader('Access-Control-Allow-Headers','Content-Type, Authorization, X-Requested-With');s.setHeader('Access-Control-Allow-Methods','GET,POST,PUT,OPTIONS');s.setHeader('Vary','Origin')};
+const json=(s,n,v)=>{cors(s);s.statusCode=n;s.setHeader('content-type','application/json; charset=utf-8');s.end(JSON.stringify(v))};
+const body=(r,cb)=>{const a=[];r.on('data',x=>a.push(x));r.on('end',()=>{try{cb(JSON.parse(Buffer.concat(a).toString()||'{}'))}catch(_){cb({})}})};
+http.createServer=function(listener,...args){return previous.call(http,(r,s)=>{cors(s);if(r.method==='OPTIONS'&&r.headers.origin===ORIGIN){s.statusCode=204;return s.end()};const u=new URL(r.url||'/','http://local');if(u.pathname!=='/api/admin/admv/settings')return listener(r,s);const me=current(r,db());if(!isAdmin(me))return json(s,403,{error:'Không có quyền quản trị ADMV'});if(r.method==='GET')return json(s,200,{...DEFAULT,...read(CFG,{})});if(r.method==='PUT')return body(r,b=>{const n={...DEFAULT,...read(CFG,{}),...(b.settings||{})};write(CFG,n);json(s,200,n)});return json(s,405,{error:'Method không được hỗ trợ'})},...args)};
