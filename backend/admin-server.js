@@ -3,6 +3,7 @@
 require('./cors-preload.js');
 require('./admin-more.js');
 require('./admin-fix.js');
+require('./admin-admv.js');
 require('./inventory-fix.js');
 require('./admin-v2.js');
 const http=require('http'),fs=require('fs'),path=require('path');
