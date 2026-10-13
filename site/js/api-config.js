@@ -15,44 +15,18 @@
     if (!raw) return raw;
     try {
       const url = new URL(raw, window.location.href);
-      if (url.origin === window.location.origin && url.pathname.startsWith('/api/')) {
-        return API_ORIGIN + url.pathname + url.search + url.hash;
-      }
+      if (url.origin === window.location.origin && url.pathname.startsWith('/api/')) return API_ORIGIN + url.pathname + url.search + url.hash;
       return raw;
     } catch (_) { return raw; }
   }
-
-  window.fetch = function (input, init) {
-    const apiUrl = toApiUrl(input);
-    const isRequestObject = typeof input !== 'string' && input instanceof Request;
-    let nextInput = input;
-    let nextInit = init ? { ...init } : {};
-    if (apiUrl && apiUrl !== (typeof input === 'string' ? input : input?.url)) {
-      if (isRequestObject) nextInput = new Request(apiUrl, input);
-      else nextInput = apiUrl;
-    }
-    if (!Object.prototype.hasOwnProperty.call(nextInit, 'credentials')) nextInit.credentials = 'include';
-    return nativeFetch(nextInput, nextInit);
-  };
-
-  if (typeof window.EventSource === 'function') {
-    const NativeEventSource = window.EventSource;
-    const PatchedEventSource = function (url, config) {
-      const nextConfig = config ? { ...config } : {};
-      nextConfig.withCredentials = true;
-      return new NativeEventSource(toApiUrl(url), nextConfig);
-    };
-    PatchedEventSource.prototype = NativeEventSource.prototype;
-    PatchedEventSource.CONNECTING = NativeEventSource.CONNECTING;
-    PatchedEventSource.OPEN = NativeEventSource.OPEN;
-    PatchedEventSource.CLOSED = NativeEventSource.CLOSED;
-    window.EventSource = PatchedEventSource;
+  window.fetch=function(input,init){const apiUrl=toApiUrl(input),isReq=typeof input!=='string'&&input instanceof Request;let ni=init?{...init}:{};let next=input;if(apiUrl&&(apiUrl!==(typeof input==='string'?input:input?.url))){next=isReq?new Request(apiUrl,input):apiUrl}if(!Object.prototype.hasOwnProperty.call(ni,'credentials'))ni.credentials='include';return nativeFetch(next,ni)};
+  if(typeof window.EventSource==='function'){
+    const NativeEventSource=window.EventSource;
+    const Patched=function(url,config){const c=config?{...config}:{};c.withCredentials=true;return new NativeEventSource(toApiUrl(url),c)};
+    Patched.prototype=NativeEventSource.prototype;Patched.CONNECTING=NativeEventSource.CONNECTING;Patched.OPEN=NativeEventSource.OPEN;Patched.CLOSED=NativeEventSource.CLOSED;window.EventSource=Patched;
   }
-
-  // VLTKIDLE2-style ADMV runtime: the admin only queues commands;
-  // the game client consumes and applies them while the character is open.
   const tag=document.createElement('script');
-  tag.src='/js/admv-runtime.js?v=20261013-queue1';
+  tag.src='/js/admv-runtime.js?v=20261013-engine1';
   tag.async=false;
   (document.head||document.documentElement).appendChild(tag);
 })();
