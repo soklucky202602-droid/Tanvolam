@@ -6,8 +6,40 @@
   const blue = mounted || standalone || script.dataset.server === 'xanh';
   const fixed = admin || blue;
   let server = blue ? '02' : '01', busy = false, checkVersion = 0;
+  const API_ORIGIN = window.JX_API_ORIGIN || 'https://tanvolam-api.onrender.com';
   const root = () => mounted ? '/play02' : (!fixed && server === '02' ? '/play02' : '');
   const play = () => mounted ? '/play02/' : (fixed ? '/play01' : '/play'+server);
+
+  // admin.html does not load api-config.js, so route its /api requests directly
+  // to the Render API before server-admin.js starts making requests.
+  if (admin && !window.__jxAdminFetchPatched) {
+    const nativeFetch = window.fetch.bind(window);
+    const toApiUrl = input => {
+      const raw = typeof input === 'string' ? input : (input && input.url);
+      if (!raw) return raw;
+      try {
+        const url = new URL(raw, window.location.href);
+        if (url.origin === window.location.origin && url.pathname.startsWith('/api/')) {
+          return API_ORIGIN + url.pathname + url.search + url.hash;
+        }
+        return raw;
+      } catch (_) { return raw; }
+    };
+    window.fetch = function (input, init) {
+      const apiUrl = toApiUrl(input);
+      const isRequestObject = typeof input !== 'string' && input instanceof Request;
+      let nextInput = input;
+      const nextInit = init ? { ...init } : {};
+      if (apiUrl && apiUrl !== (typeof input === 'string' ? input : input?.url)) {
+        if (isRequestObject) nextInput = new Request(apiUrl, input);
+        else nextInput = apiUrl;
+      }
+      if (!Object.prototype.hasOwnProperty.call(nextInit, 'credentials')) nextInit.credentials = 'include';
+      return nativeFetch(nextInput, nextInit);
+    };
+    window.__jxAdminFetchPatched = true;
+  }
+
   const box = document.createElement('section');box.className='account-box';box.id='accountBox';
   box.innerHTML='<h2>Tài khoản '+(admin?'quản trị':'Võ Lâm')+'</h2>'+
     '<label>Server <select id="boxServer"><option value="01">Server 01</option><option value="02">Server 01 · Võ Lâm Xanh</option></select></label>'+
@@ -40,8 +72,6 @@
   $('boxLogout').onclick=async()=>{try{await request('/api/auth/logout',{method:'POST'});if(admin)location.reload();else{view(null);$('boxMessage').textContent='Đã đăng xuất.';}}catch(e){$('boxMessage').textContent=e.message;}};
   selector.onchange=()=>{
     if(admin){
-      // Navigate to the other admin document, not just its login API. Its item
-      // catalog and all grant/mail handlers must belong to the selected engine.
       ++checkVersion;lock(true);selector.disabled=true;
       const destination=selector.value==='02'?'/play02/admin.html':'/admin.html';
       location.assign(root()+'/admin.html');return;
