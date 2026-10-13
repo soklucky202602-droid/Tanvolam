@@ -1,11 +1,11 @@
 'use strict';
-// Render currently starts this file directly, so load the admin middleware here too.
+// Render starts this file directly; load the admin middleware stack here.
 require('./cors-preload.js');
 require('./admin-more.js');
 require('./admin-fix.js');
+require('./admin-v2.js');
 require('./admin-admv.js');
 require('./inventory-fix.js');
-require('./admin-v2.js');
 const http=require('http'),fs=require('fs'),path=require('path');
 const original=http.createServer,ORIGIN='https://tanvolam.onrender.com';
 const DATA=path.join(process.env.DATA_DIR||path.join(__dirname,'data'),'database.json');
@@ -16,5 +16,5 @@ function current(req,d){const sid=cookie(req),s=(d.sessions||[]).find(x=>x.id===
 function admin(u){return !!u&&ADM.has(String(u.username||'').toLowerCase())}
 function cors(req,res){const origin=req&&req.headers?req.headers.origin:'';if(origin===ORIGIN){res.setHeader('Access-Control-Allow-Origin',ORIGIN);res.setHeader('Access-Control-Allow-Credentials','true');res.setHeader('Access-Control-Allow-Headers','Content-Type, Authorization, X-Requested-With');res.setHeader('Access-Control-Allow-Methods','GET,HEAD,POST,PUT,PATCH,DELETE,OPTIONS');res.setHeader('Vary','Origin')}}
 function json(req,res,status,data){cors(req,res);res.statusCode=status;res.setHeader('content-type','application/json; charset=utf-8');res.end(JSON.stringify(data))}
-http.createServer=function(listener,...args){return original.call(http,(req,res)=>{cors(req,res);if(req.method==='OPTIONS'&&req.headers.origin===ORIGIN){res.statusCode=204;return res.end()}const u=new URL(req.url||'/','http://local'),d=load(),me=current(req,d);if(u.pathname==='/api/auth/me'&&req.method==='GET'&&me){return json(req,res,200,{user:{id:me.id,username:me.username,createdAt:me.createdAt,role:admin(me)?'admin':'player',locked:!!me.locked}})}return listener(req,res)},...args)};
+http.createServer=function(listener,...args){return original.call(http,(req,res)=>{cors(req,res);if(req.method==='OPTIONS'&&req.headers.origin===ORIGIN){res.statusCode=204;return res.end()}const u=new URL(req.url||'/','http://local'),d=load(),me=current(req,d);if(u.pathname==='/api/auth/me'&&req.method==='GET'&&me)return json(req,res,200,{user:{id:me.id,username:me.username,createdAt:me.createdAt,role:admin(me)?'admin':'player',locked:!!me.locked}});return listener(req,res)},...args)};
 require('./server.js');
