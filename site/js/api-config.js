@@ -48,11 +48,13 @@
   };
 
   // The chat stream may use EventSource rather than fetch(). Rewrite its
-  // relative /api/* URL as well.
+  // relative /api/* URL and keep the login cookie on the cross-origin stream.
   if (typeof window.EventSource === 'function') {
     const NativeEventSource = window.EventSource;
     const PatchedEventSource = function (url, config) {
-      return new NativeEventSource(toApiUrl(url), config);
+      const nextConfig = config ? { ...config } : {};
+      nextConfig.withCredentials = true;
+      return new NativeEventSource(toApiUrl(url), nextConfig);
     };
     PatchedEventSource.prototype = NativeEventSource.prototype;
     PatchedEventSource.CONNECTING = NativeEventSource.CONNECTING;
